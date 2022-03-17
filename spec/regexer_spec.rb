@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'regexer'
+require "regexer"
 
 RSpec.describe Regexer do
   it "has a version number" do
@@ -16,7 +16,7 @@ RSpec.describe Regexer::Pattern do
           has_letters from: "A", to: "z"
         end
 
-        expect(pattern).to eq /[A-z]+/
+        expect(pattern).to eq(/[A-z]+/)
       end
     end
   end
