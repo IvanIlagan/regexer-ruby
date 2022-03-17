@@ -1,8 +1,6 @@
 # Regexer
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/regexer`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A ruby DSL for generating regex patterns in a human readable format. Regexer aims in making regex more easily learned and understood at first glance.
 
 ## Installation
 
@@ -22,7 +20,23 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+NOTE: Usage is in ongoing improvements. Expect this section to change overtime
+
+Require Regexer in your ruby file and call the regex instance method of Regexer::Pattern class
+
+```ruby
+require 'regexer'
+
+pattern = Regexer::Pattern.new.regex do
+  # add regexer's built-in keywords and methods here to build desired regex pattern
+  has_letters from: "A", to: "z"
+  has_numbers from: 0, to: 9
+end
+
+print pattern
+
+# outputs /[A-z]+[0-9]+/
+```
 
 ## Development
 
