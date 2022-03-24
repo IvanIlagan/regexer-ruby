@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require "regexer/validators/from_to_validator"
+require "regexer/validators/letter_validator"
+require "regexer/validators/number_validator"
+require "regexer/validators/contains_value_validator"
+
 module Regexer
   # A Class that contains core methods for building regex patterns
   class Pattern
@@ -14,22 +19,27 @@ module Regexer
 
     private
 
-    def has_letters(**kwargs)
-      pattern = "[#{kwargs[:from]}-#{kwargs[:to]}]+"
-      pattern.gsub!("+", "*") if kwargs[:optional]
+    def has_letters(from:, to:, optional: false)
+      Regexer::Validators::LetterValidator.letter?(from)
+      Regexer::Validators::LetterValidator.letter?(to)
+      Regexer::Validators::FromToValidator.validate_range(from, to)
+      pattern = "[#{from}-#{to}]+"
+      pattern.gsub!("+", "*") if optional
       @result_pattern += pattern
     end
 
-    def has_numbers(**kwargs)
-      pattern = "[#{kwargs[:from]}-#{kwargs[:to]}]+"
-      pattern.gsub!("+", "*") if kwargs[:optional]
+    def has_numbers(from:, to:, optional: false)
+      Regexer::Validators::NumberValidator.number?(from)
+      Regexer::Validators::NumberValidator.number?(to)
+      Regexer::Validators::FromToValidator.validate_range(from, to)
+      pattern = "[#{from}-#{to}]+"
+      pattern.gsub!("+", "*") if optional
       @result_pattern += pattern
     end
 
-    def contains(value, **kwargs)
-      pattern = "#{value}+"
-      pattern = pattern[0..-2] if kwargs[:one?]
-      pattern = "#{pattern[0..-2]}*" if kwargs[:optional]
+    def contains(value)
+      Regexer::Validators::ContainsValueValidator.value_valid?(value)
+      pattern = value.to_s
       @result_pattern += pattern
     end
   end
