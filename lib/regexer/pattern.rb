@@ -42,5 +42,12 @@ module Regexer
       pattern = Regexp.escape(value.to_s)
       @result_pattern += pattern
     end
+
+    def starts_with(value)
+      Regexer::Validators::ContainsValueValidator.value_valid?(value)
+      pattern = Regexp.escape(value.to_s)
+      pattern = "^(#{pattern})"
+      @result_pattern += pattern
+    end
   end
 end
