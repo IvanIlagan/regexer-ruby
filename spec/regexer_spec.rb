@@ -96,6 +96,16 @@ RSpec.describe Regexer::Pattern do
         end
       end
 
+      context "when value contains regex special characters" do
+        it "escapes those special characters in the final generated pattern" do
+          pattern = Regexer::Pattern.new.regex do
+            contains ".+*?^$()[]{}|\\"
+          end
+
+          expect(pattern).to eq(/\.\+\*\?\^\$\(\)\[\]\{\}\|\\/)
+        end
+      end
+
       context "when value is NOT a string or an integer" do
         it "raises InvalidValueError error" do
           expect do

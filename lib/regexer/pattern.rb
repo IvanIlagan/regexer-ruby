@@ -39,7 +39,7 @@ module Regexer
 
     def contains(value)
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
-      pattern = value.to_s
+      pattern = Regexp.escape(value.to_s)
       @result_pattern += pattern
     end
   end
