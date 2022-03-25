@@ -7,12 +7,12 @@ module Regexer
     # A Validator Class for validating values being passed to contains Regexer::Pattern method
     class ContainsValueValidator
       def self.value_valid?(value)
-        error_message = "Value should only be of type String or Integer"
-        raise Regexer::Exceptions::InvalidValueError, error_message unless integer?(value) || string?(value)
+        error_message = "Value should only be of type String or Integer or Float"
+        raise Regexer::Exceptions::InvalidValueError, error_message unless number?(value) || string?(value)
       end
 
-      def self.integer?(value)
-        value.instance_of?(Integer)
+      def self.number?(value)
+        value.instance_of?(Integer) || value.instance_of?(Float)
       end
 
       def self.string?(value)
