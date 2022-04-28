@@ -27,13 +27,13 @@ Require Regexer in your ruby file and call the regex instance method of Regexer:
 ```ruby
 require 'regexer'
 
-pattern = Regexer::Pattern.new.regex do
+pattern = Regexer::Pattern.new do
   # add regexer's built-in keywords and methods here to build desired regex pattern
   has_letters from: "A", to: "z"
   has_numbers from: 0, to: 9
 end
 
-print pattern
+print pattern.result
 
 # outputs /[A-z]+[0-9]+/
 ```
