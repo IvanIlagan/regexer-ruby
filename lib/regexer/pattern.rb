@@ -8,12 +8,12 @@ require "regexer/validators/contains_value_validator"
 module Regexer
   # A Class that contains core methods for building regex patterns
   class Pattern
-    def initialize
+    def initialize(&block)
       @result_pattern = ""
+      instance_exec(&block)
     end
 
-    def regex(&block)
-      instance_exec(&block)
+    def result
       /#{@result_pattern}/
     end
 
