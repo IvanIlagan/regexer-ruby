@@ -9,52 +9,74 @@ module Regexer
   # A Class that contains core methods for building regex patterns
   class Pattern
     def initialize(&block)
-      @result_pattern = ""
+      @patterns = []
       instance_exec(&block)
     end
 
-    def result
-      /#{@result_pattern}/
+    def build_regex
+      /#{@patterns.join}/
     end
 
     private
 
-    def has_letters(from:, to:, optional: false)
+    def has_consecutive_letters(from:, to:)
+      has_letters(from: from, to: to)
+      @patterns[-1] = append_character_in_pattern(@patterns.last, "+", -1)
+    end
+
+    def has_consecutive_numbers(from:, to:)
+      has_numbers(from: from, to: to)
+      @patterns[-1] = append_character_in_pattern(@patterns.last, "+", -1)
+    end
+
+    def contains_consecutive(value)
+      contains(value)
+      @patterns[-1] = append_character_in_pattern(@patterns.last, "+", -1)
+    end
+
+    def starts_with_consecutive(value)
+      starts_with(value)
+      @patterns[-1] = append_character_in_pattern(@patterns.last, "+", -1)
+    end
+
+    def ends_with_consecutive(value)
+      ends_with(value)
+      @patterns[-1] = append_character_in_pattern(@patterns.last, "+", -2)
+    end
+
+    def has_letters(from:, to:)
       Regexer::Validators::LetterValidator.letter?(from)
       Regexer::Validators::LetterValidator.letter?(to)
       Regexer::Validators::FromToValidator.validate_range(from, to)
-      pattern = "[#{from}-#{to}]+"
-      pattern.gsub!("+", "*") if optional
-      @result_pattern += pattern
+      @patterns.push("[#{from}-#{to}]")
     end
 
-    def has_numbers(from:, to:, optional: false)
+    def has_numbers(from:, to:)
       Regexer::Validators::NumberValidator.number?(from)
       Regexer::Validators::NumberValidator.number?(to)
       Regexer::Validators::FromToValidator.validate_range(from, to)
-      pattern = "[#{from}-#{to}]+"
-      pattern.gsub!("+", "*") if optional
-      @result_pattern += pattern
+      @patterns.push("[#{from}-#{to}]")
     end
 
     def contains(value)
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
-      pattern = Regexp.escape(value.to_s)
-      @result_pattern += pattern
+      @patterns.push("(#{Regexp.escape(value.to_s)})")
     end
 
     def starts_with(value)
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
       pattern = Regexp.escape(value.to_s)
-      pattern = "^(#{pattern})"
-      @result_pattern += pattern
+      @patterns.push("^(#{pattern})")
     end
 
     def ends_with(value)
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
       pattern = Regexp.escape(value.to_s)
-      pattern = "(#{pattern})$"
-      @result_pattern += pattern
+      @patterns.push("(#{pattern})$")
+    end
+
+    def append_character_in_pattern(pattern, character_to_insert, index)
+      pattern.insert(index, character_to_insert)
     end
   end
 end
