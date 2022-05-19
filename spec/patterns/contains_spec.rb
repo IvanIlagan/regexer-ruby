@@ -6,32 +6,32 @@ require "regexer/exceptions/invalid_from_to_range_error"
 RSpec.describe "Regexer::Pattern #contains" do
   context "when creating a regex pattern for matching a set of given characters" do
     context "when value is an exact integer: 26543" do
-      it "returns /26543/ regex pattern" do
+      it "returns /(26543)/ regex pattern" do
         pattern = Regexer::Pattern.new do
           contains 26_543
-        end.result
+        end.build_regex
 
-        expect(pattern).to eq(/26543/)
+        expect(pattern).to eq(/(26543)/)
       end
     end
 
     context "when value is an exact float: 3.56" do
-      it "returns /3\.56/ regex pattern" do
+      it "returns /(3\.56)/ regex pattern" do
         pattern = Regexer::Pattern.new do
           contains 3.56
-        end.result
+        end.build_regex
 
-        expect(pattern).to eq(/3\.56/)
+        expect(pattern).to eq(/(3\.56)/)
       end
     end
 
     context "when value is an exact set of characters: 'testing'" do
-      it "returns /testing/ regex pattern" do
+      it "returns /(testing)/ regex pattern" do
         pattern = Regexer::Pattern.new do
           contains "testing"
-        end.result
+        end.build_regex
 
-        expect(pattern).to eq(/testing/)
+        expect(pattern).to eq(/(testing)/)
       end
     end
 
@@ -39,9 +39,9 @@ RSpec.describe "Regexer::Pattern #contains" do
       it "escapes those special characters in the final generated pattern" do
         pattern = Regexer::Pattern.new do
           contains ".+*?^$()[]{}|\\"
-        end.result
+        end.build_regex
 
-        expect(pattern).to eq(/\.\+\*\?\^\$\(\)\[\]\{\}\|\\/)
+        expect(pattern).to eq(/(\.\+\*\?\^\$\(\)\[\]\{\}\|\\)/)
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe "Regexer::Pattern #contains" do
         expect do
           Regexer::Pattern.new do
             contains(/test/)
-          end.result
+          end.build_regex
         end.to raise_error(Regexer::Exceptions::InvalidValueError)
           .with_message("Value should only be of type String or Integer or Float")
       end

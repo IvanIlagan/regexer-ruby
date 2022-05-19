@@ -9,7 +9,7 @@ RSpec.describe "Regexer::Pattern #starts_with" do
       it "returns /^(26543)/ regex pattern" do
         pattern = Regexer::Pattern.new do
           starts_with 26_543
-        end.result
+        end.build_regex
 
         expect(pattern).to eq(/^(26543)/)
       end
@@ -19,7 +19,7 @@ RSpec.describe "Regexer::Pattern #starts_with" do
       it "returns /^(3\.56)/ regex pattern" do
         pattern = Regexer::Pattern.new do
           starts_with 3.56
-        end.result
+        end.build_regex
 
         expect(pattern).to eq(/^(3\.56)/)
       end
@@ -29,7 +29,7 @@ RSpec.describe "Regexer::Pattern #starts_with" do
       it "returns /^(testing)/ regex pattern" do
         pattern = Regexer::Pattern.new do
           starts_with "testing"
-        end.result
+        end.build_regex
 
         expect(pattern).to eq(/^(testing)/)
       end
@@ -39,7 +39,7 @@ RSpec.describe "Regexer::Pattern #starts_with" do
       it "escapes those special characters in the final generated pattern" do
         pattern = Regexer::Pattern.new do
           starts_with ".+*?^$()[]{}|\\"
-        end.result
+        end.build_regex
 
         expect(pattern).to eq(/^(\.\+\*\?\^\$\(\)\[\]\{\}\|\\)/)
       end
@@ -50,7 +50,7 @@ RSpec.describe "Regexer::Pattern #starts_with" do
         expect do
           Regexer::Pattern.new do
             starts_with(/test/)
-          end.result
+          end.build_regex
         end.to raise_error(Regexer::Exceptions::InvalidValueError)
           .with_message("Value should only be of type String or Integer or Float")
       end

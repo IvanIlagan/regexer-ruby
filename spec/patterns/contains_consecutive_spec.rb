@@ -3,45 +3,45 @@
 require "regexer"
 require "regexer/exceptions/invalid_from_to_range_error"
 
-RSpec.describe "Regexer::Pattern #ends_with" do
-  context "when creating a regex pattern for matching a set of given characters in the end of strings" do
+RSpec.describe "Regexer::Pattern #contains_consecutive" do
+  context "when creating a regex pattern for matching consecutive set of given characters" do
     context "when value is an exact integer: 26543" do
-      it "returns /(26543)$/ regex pattern" do
+      it "returns /(26543)+/ regex pattern" do
         pattern = Regexer::Pattern.new do
-          ends_with 26_543
+          contains_consecutive 26_543
         end.build_regex
 
-        expect(pattern).to eq(/(26543)$/)
+        expect(pattern).to eq(/(26543)+/)
       end
     end
 
     context "when value is an exact float: 3.56" do
-      it "returns /(3\.56)$/ regex pattern" do
+      it "returns /(3\.56)+/ regex pattern" do
         pattern = Regexer::Pattern.new do
-          ends_with 3.56
+          contains_consecutive 3.56
         end.build_regex
 
-        expect(pattern).to eq(/(3\.56)$/)
+        expect(pattern).to eq(/(3\.56)+/)
       end
     end
 
     context "when value is an exact set of characters: 'testing'" do
-      it "returns /(testing)$/ regex pattern" do
+      it "returns /(testing)+/ regex pattern" do
         pattern = Regexer::Pattern.new do
-          ends_with "testing"
+          contains_consecutive "testing"
         end.build_regex
 
-        expect(pattern).to eq(/(testing)$/)
+        expect(pattern).to eq(/(testing)+/)
       end
     end
 
     context "when value contains regex special characters" do
       it "escapes those special characters in the final generated pattern" do
         pattern = Regexer::Pattern.new do
-          ends_with ".+*?^$()[]{}|\\"
+          contains_consecutive ".+*?^$()[]{}|\\"
         end.build_regex
 
-        expect(pattern).to eq(/(\.\+\*\?\^\$\(\)\[\]\{\}\|\\)$/)
+        expect(pattern).to eq(/(\.\+\*\?\^\$\(\)\[\]\{\}\|\\)+/)
       end
     end
 
@@ -49,7 +49,7 @@ RSpec.describe "Regexer::Pattern #ends_with" do
       it "raises InvalidValueError error" do
         expect do
           Regexer::Pattern.new do
-            ends_with(/test/)
+            contains_consecutive(/test/)
           end.build_regex
         end.to raise_error(Regexer::Exceptions::InvalidValueError)
           .with_message("Value should only be of type String or Integer or Float")
