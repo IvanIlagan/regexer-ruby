@@ -1,37 +1,23 @@
 # frozen_string_literal: true
 
 require "regexer"
-require "regexer/exceptions/invalid_from_to_range_error"
+require "./spec/shared_examples/shared_examples_for_has_numbers_test"
 
 RSpec.describe "Regexer::Pattern #has_numbers" do
-  context "when creating a regex pattern for matching a number in a range 0-9" do
-    it "returns /[0-9]/ regex pattern" do
-      pattern = Regexer::Pattern.new do
-        has_numbers from: 0, to: 9
-      end.build_regex
+  let(:value1) { nil }
+  let(:value2) { nil }
 
-      expect(pattern).to eq(/[0-9]/)
-    end
-
-    context "when From value is greater than the To value" do
-      it "raises InvalidFromToRangeError error" do
-        expect do
-          Regexer::Pattern.new do
-            has_numbers from: 9, to: 0
-          end.build_regex
-        end.to raise_error(Regexer::Exceptions::InvalidFromToRangeError)
-      end
-    end
-
-    context "when From value or To value is NOT an integer from 0 to 9" do
-      it "raises InvalidValueError error with 'Value should only be an integer from 0 to 9' as error message" do
-        expect do
-          Regexer::Pattern.new do
-            has_numbers from: -2, to: 92
-          end.build_regex
-        end.to raise_error(Regexer::Exceptions::InvalidValueError)
-          .with_message("Value should only be an integer from 0 to 9")
-      end
-    end
+  let(:pattern_block) do
+    lambda do |val1, val2|
+      -> { has_numbers from: val1, to: val2 }
+    end.call(value1, value2)
   end
+
+  subject(:pattern) do
+    Regexer::Pattern.new(&pattern_block).build_regex
+  end
+
+  include_examples "has_numbers method test example", from_value: 0, to_value: 9, expected_value: /[0-9]/
+  include_examples "has_numbers method invalid From-To Value Range Error", from_value: 9, to_value: 0
+  include_examples "has_numbers method invalid From-To Value Error", from_value: -2, to_value: 92
 end

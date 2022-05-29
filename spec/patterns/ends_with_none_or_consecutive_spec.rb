@@ -36,6 +36,7 @@ RSpec.describe "Regexer::Pattern #ends_with_none_or_consecutive" do
     {
       case: "when value contains regex special characters",
       test_value: ".+*?^$()[]{}|\\",
+      custom_assertion_message: "escapes those special characters in the final generated pattern",
       expected_value: /(\.\+\*\?\^\$\(\)\[\]\{\}\|\\)*$/
     }
   ]

@@ -1,59 +1,44 @@
 # frozen_string_literal: true
 
 require "regexer"
-require "regexer/exceptions/invalid_from_to_range_error"
+require "./spec/shared_examples/shared_examples_for_contains_test"
 
 RSpec.describe "Regexer::Pattern #starts_with" do
-  context "when creating a regex pattern for matching a set of given characters in the beginning of strings" do
-    context "when value is an exact integer: 26543" do
-      it "returns /^(26543)/ regex pattern" do
-        pattern = Regexer::Pattern.new do
-          starts_with 26_543
-        end.build_regex
+  let(:val) { nil }
 
-        expect(pattern).to eq(/^(26543)/)
-      end
-    end
-
-    context "when value is an exact float: 3.56" do
-      it "returns /^(3\.56)/ regex pattern" do
-        pattern = Regexer::Pattern.new do
-          starts_with 3.56
-        end.build_regex
-
-        expect(pattern).to eq(/^(3\.56)/)
-      end
-    end
-
-    context "when value is an exact set of characters: 'testing'" do
-      it "returns /^(testing)/ regex pattern" do
-        pattern = Regexer::Pattern.new do
-          starts_with "testing"
-        end.build_regex
-
-        expect(pattern).to eq(/^(testing)/)
-      end
-    end
-
-    context "when value contains regex special characters" do
-      it "escapes those special characters in the final generated pattern" do
-        pattern = Regexer::Pattern.new do
-          starts_with ".+*?^$()[]{}|\\"
-        end.build_regex
-
-        expect(pattern).to eq(/^(\.\+\*\?\^\$\(\)\[\]\{\}\|\\)/)
-      end
-    end
-
-    context "when value is NOT a string or an integer or a float" do
-      it "raises InvalidValueError error" do
-        expect do
-          Regexer::Pattern.new do
-            starts_with(/test/)
-          end.build_regex
-        end.to raise_error(Regexer::Exceptions::InvalidValueError)
-          .with_message("Value should only be of type String or Integer or Float")
-      end
-    end
+  let(:pattern_block) do
+    lambda do |value|
+      -> { starts_with value }
+    end.call(val)
   end
+
+  subject(:pattern) do
+    Regexer::Pattern.new(&pattern_block).build_regex
+  end
+
+  # NOTE: Under the hood, starts_with method actually uses the contains method
+  include_examples "contains method test examples", [
+    {
+      case: "when value is an exact integer: 26543",
+      test_value: 26_543,
+      expected_value: /^(26543)/
+    },
+    {
+      case: "when value is an exact float: 3.56",
+      test_value: 3.56,
+      expected_value: /^(3\.56)/
+    },
+    {
+      case: "when value is an exact set of characters: 'testing'",
+      test_value: "testing",
+      expected_value: /^(testing)/
+    },
+    {
+      case: "when value contains regex special characters",
+      test_value: ".+*?^$()[]{}|\\",
+      custom_assertion_message: "escapes those special characters in the final generated pattern",
+      expected_value: /^(\.\+\*\?\^\$\(\)\[\]\{\}\|\\)/
+    }
+  ]
+  include_examples "contains method invalid value error test example", value: /test/
 end
