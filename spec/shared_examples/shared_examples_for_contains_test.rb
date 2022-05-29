@@ -6,7 +6,7 @@ RSpec.shared_examples "contains method test examples" do |test_cases|
       context test_case[:case] do
         let!(:val) { test_case[:test_value] }
 
-        it "returns #{test_case[:expected_value].inspect} regex pattern" do
+        it(test_case[:custom_assertion_message] || "returns #{test_case[:expected_value].inspect} regex pattern") do
           expect(pattern).to eq(test_case[:expected_value])
         end
       end

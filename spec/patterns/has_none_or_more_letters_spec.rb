@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "regexer"
-require "regexer/exceptions/invalid_from_to_range_error"
 require "./spec/shared_examples/shared_examples_for_has_letters_test"
 require "pry"
 

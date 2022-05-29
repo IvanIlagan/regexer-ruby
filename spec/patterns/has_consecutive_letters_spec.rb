@@ -1,37 +1,23 @@
 # frozen_string_literal: true
 
 require "regexer"
-require "regexer/exceptions/invalid_from_to_range_error"
+require "./spec/shared_examples/shared_examples_for_has_letters_test"
 
 RSpec.describe "Regexer::Pattern #has_consecutive_letters" do
-  context "when creating a regex pattern for matching consecutive letters in a range A-z" do
-    it "returns /[A-z]+/ regex pattern" do
-      pattern = Regexer::Pattern.new do
-        has_consecutive_letters from: "A", to: "z"
-      end
+  let(:value1) { nil }
+  let(:value2) { nil }
 
-      expect(pattern.build_regex).to eq(/[A-z]+/)
-    end
-
-    context "when From value is greater than the To value in terms of ASCII value" do
-      it "raises a InvalidFromToRangeError error" do
-        expect do
-          Regexer::Pattern.new do
-            has_consecutive_letters from: "a", to: "Z"
-          end.build_regex
-        end.to raise_error(Regexer::Exceptions::InvalidFromToRangeError)
-      end
-    end
-
-    context "when From value or To value is NOT a single letter" do
-      it "raises InvalidValueError error with 'Value should only be a single letter' as error message" do
-        expect do
-          Regexer::Pattern.new do
-            has_consecutive_letters from: "test", to: 239
-          end.build_regex
-        end.to raise_error(Regexer::Exceptions::InvalidValueError)
-          .with_message("Value should only be a single letter")
-      end
-    end
+  let(:pattern_block) do
+    lambda do |val1, val2|
+      -> { has_consecutive_letters from: val1, to: val2 }
+    end.call(value1, value2)
   end
+
+  subject(:pattern) do
+    Regexer::Pattern.new(&pattern_block).build_regex
+  end
+
+  include_examples "has_letters method test example", from_value: "A", to_value: "z", expected_value: /[A-z]+/
+  include_examples "has_letters method invalid From-To Value Range Error", from_value: "a", to_value: "Z"
+  include_examples "has_letters method invalid From-To Value Error", from_value: "test", to_value: 239
 end
