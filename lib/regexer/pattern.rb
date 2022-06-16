@@ -70,6 +70,7 @@ module Regexer
       @patterns[-1] = append_character_in_pattern(@patterns.last, "+", -2)
     end
 
+    # BASE PATTERNS
     def has_letters(from:, to:)
       Regexer::Validators::LetterValidator.letter?(from)
       Regexer::Validators::LetterValidator.letter?(to)
@@ -99,6 +100,11 @@ module Regexer
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
       pattern = Regexp.escape(value.to_s)
       @patterns.push("(#{pattern})$")
+    end
+
+    def has_word_character
+      @patterns.push("\\w")
+      "\\w"
     end
 
     def append_character_in_pattern(pattern, character_to_insert, index)
