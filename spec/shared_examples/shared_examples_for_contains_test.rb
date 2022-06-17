@@ -15,12 +15,12 @@ RSpec.shared_examples "contains method test examples" do |test_cases|
 end
 
 RSpec.shared_examples "contains method invalid value error test example" do |value:|
-  context "when value is NOT a string or an integer or a float" do
+  context "when value is NOT a string or an integer or a float or a Regexer::Models::Pattern" do
     let!(:val) { value }
 
     it "raises InvalidValueError error" do
       expect { pattern }.to raise_error(Regexer::Exceptions::InvalidValueError)
-        .with_message("Value should only be of type String or Integer or Float")
+        .with_message("Value should only be of type String or Integer or Float or Regexer::Models::Pattern")
     end
   end
 end

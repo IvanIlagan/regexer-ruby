@@ -13,7 +13,7 @@ RSpec.describe "Regexer::Pattern #starts_with" do
   end
 
   subject(:pattern) do
-    Regexer::Pattern.new(&pattern_block).build_regex
+    Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
   # NOTE: Under the hood, starts_with method actually uses the contains method

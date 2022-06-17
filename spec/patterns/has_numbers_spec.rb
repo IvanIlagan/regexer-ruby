@@ -9,12 +9,12 @@ RSpec.describe "Regexer::Pattern #has_numbers" do
 
   let(:pattern_block) do
     lambda do |val1, val2|
-      -> { has_numbers from: val1, to: val2 }
+      -> { has_number from: val1, to: val2 }
     end.call(value1, value2)
   end
 
   subject(:pattern) do
-    Regexer::Pattern.new(&pattern_block).build_regex
+    Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
   include_examples "has_numbers method test example", from_value: 0, to_value: 9, expected_value: /[0-9]/
