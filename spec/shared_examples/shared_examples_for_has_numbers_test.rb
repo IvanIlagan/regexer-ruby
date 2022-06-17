@@ -8,6 +8,18 @@ RSpec.shared_examples "has_numbers method test example" do |from_value:, to_valu
     it "returns #{expected_value.inspect} regex pattern" do
       expect(pattern).to eq(expected_value)
     end
+
+    context "when number alias method is used" do
+      let!(:pattern_block) do
+        lambda do |val1, val2|
+          -> { number from: val1, to: val2 }
+        end.call(value1, value2)
+      end
+
+      it "returns #{expected_value.inspect} regex pattern" do
+        expect(pattern).to eq(expected_value)
+      end
+    end
   end
 end
 

@@ -9,7 +9,7 @@ RSpec.describe "Regexer::Pattern #contains" do
   end
 
   subject(:pattern) do
-    Regexer::Pattern.new(&pattern_block).build_regex
+    Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
   include_examples "has_word_character method test examples", [
@@ -30,4 +30,14 @@ RSpec.describe "Regexer::Pattern #contains" do
       test_value: "test!_123@yahoo.com"
     }
   ]
+
+  context "when word_character alias method is used" do
+    let!(:pattern_block) do
+      -> { word_character }
+    end
+
+    it "returns /\\w/ regex pattern" do
+      expect(pattern).to eq(/\w/)
+    end
+  end
 end

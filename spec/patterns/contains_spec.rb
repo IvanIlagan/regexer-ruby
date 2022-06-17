@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "regexer"
+require "./spec/shared_examples/shared_examples_for_contains_test"
 
 RSpec.describe "Regexer::Pattern #contains" do
   let(:val) { nil }
@@ -12,7 +13,7 @@ RSpec.describe "Regexer::Pattern #contains" do
   end
 
   subject(:pattern) do
-    Regexer::Pattern.new(&pattern_block).build_regex
+    Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
   include_examples "contains method test examples", [

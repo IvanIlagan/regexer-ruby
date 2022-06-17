@@ -13,7 +13,7 @@ RSpec.describe "Regexer::Pattern #ends_with" do
   end
 
   subject(:pattern) do
-    Regexer::Pattern.new(&pattern_block).build_regex
+    Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
   # NOTE: Under the hood, ends_with method actually uses the contains method
