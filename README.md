@@ -1,6 +1,6 @@
 # Regexer
 
-A ruby DSL for generating regex patterns in a human readable format. Regexer aims in making regex more easily learned and understood at first glance.
+A ruby DSL for building regex patterns in a human readable format. Regexer aims in making regex more easily read, learned and understood at first glance.
 
 ## Installation
 
@@ -22,21 +22,26 @@ Or install it yourself as:
 
 NOTE: Usage is in ongoing improvements. Expect this section to change overtime
 
-Require Regexer in your ruby file and call the regex instance method of Regexer::Pattern class
+Require Regexer in your ruby file and give a block to the instance of Regexer::PatternBuilder class
 
 ```ruby
+# require the gem
 require 'regexer'
 
-pattern = Regexer::Pattern.new do
-  # add regexer's built-in keywords and methods here to build desired regex pattern
-  has_letters from: "A", to: "z"
-  has_numbers from: 0, to: 9
-end
+# Build your regex patterns within a block right after instantiating Regexer::PatternBuilder class
+pattern = Regexer::PatternBuilder.new do
+  has_letter from: "A", to: "z"
+  has_number from: 0, to: 9
+end.result # Get the result of the pattern builder by calling the result method in which it returns a Regexer::Models::Pattern object
 
-print pattern.result
+print pattern.raw_pattern
+# outputs '/[A-z]+[0-9]+/'
 
+print pattern.regex
 # outputs /[A-z]+[0-9]+/
 ```
+
+See [GETTING_STARTED](./GETTING_STARTED.md) for indepth details on usage and the documentation for the available DSL methods.
 
 ## Development
 
