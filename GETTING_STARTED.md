@@ -7,6 +7,7 @@
   - [Standalone Patterns](#standalone-patterns)
     - [Letter in a given range](#letter-in-a-given-range)
     - [Number in a given range](#number-in-a-given-range)
+    - [ASCII character in a given range](#ascii-character-in-a-given-range)
     - [Word Character](#word-character)
   - [Chainable Patterns](#chainable-patterns)
     - [Group of characters](#group-of-characters)
@@ -103,6 +104,18 @@ end
 ```
 
 The method requires 2 keyword arguments named from and to in which we can only assign a positive integer value to each of them. Also the value for the from argument should always be lower than the to argument value. If an invalid value is given, an exception is raised.
+
+### ASCII character in a given range
+To extend the power of the range in regex, the has_ascii_character or ascii_character_method allows us to produce a pattern to check for characters within a range of the given ascii character.
+
+```ruby
+Regexer::PatternBuilder.new do
+  has_ascii_character from: "<", to: "}"
+  ascii_character from: "0", to: "9"
+end
+```
+
+The method requires 2 keyword arguments named from and to in which we can only assign a single character string that is in the ASCII table. The value for the from argument should always be lower than the to argument value. If an invalid value is given, an exception is raised.
 
 ### Word Character
 In regex, there is a special pattern that matches any alphanumeric character and underscore with just 2 characters and that is the \w or Word pattern. Regexer also offers that exact pattern via the has_word_character or word_character method.
