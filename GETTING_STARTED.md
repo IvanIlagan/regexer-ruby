@@ -117,6 +117,8 @@ end
 
 The method requires 2 keyword arguments named from and to in which we can only assign a single character string that is in the ASCII table. The value for the from argument should always be lower than the to argument value. If an invalid value is given, an exception is raised.
 
+Keep in mind that there are characters in the ASCII table that has a special function in regex. So given that, this method automatically escapes those characters.
+
 ### Word Character
 In regex, there is a special pattern that matches any alphanumeric character and underscore with just 2 characters and that is the \w or Word pattern. Regexer also offers that exact pattern via the has_word_character or word_character method.
 ```ruby
