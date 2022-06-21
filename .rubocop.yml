@@ -9,6 +9,9 @@ Style/StringLiteralsInInterpolation:
   Enabled: true
   EnforcedStyle: double_quotes
 
+Style/RedundantRegexpEscape:
+  Enabled: false
+
 Naming/PredicateName:
   Enabled: false
 
@@ -16,6 +19,10 @@ Layout/LineLength:
   Max: 120
   Exclude:
     - 'spec/**/*.rb'
+
+Layout/ClassLength:
+  Exclude:
+    - 'lib/regexer/pattern_builder.rb'
 
 Metrics/BlockLength:
   Exclude:

@@ -4,6 +4,7 @@ require "regexer/validators/from_to_validator"
 require "regexer/validators/letter_validator"
 require "regexer/validators/number_validator"
 require "regexer/validators/contains_value_validator"
+require "regexer/validators/ascii_character_validator"
 require "regexer/models/pattern"
 require "pry"
 
@@ -52,6 +53,15 @@ module Regexer
       Regexer::Validators::NumberValidator.number?(to)
       Regexer::Validators::FromToValidator.validate_range(from, to)
       pattern_object = Regexer::Models::Pattern.new("[#{from}-#{to}]")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
+    def has_ascii_character(from:, to:)
+      Regexer::Validators::AsciiCharacterValidator.ascii_character?(from)
+      Regexer::Validators::AsciiCharacterValidator.ascii_character?(to)
+      Regexer::Validators::FromToValidator.validate_range(from, to)
+      pattern_object = Regexer::Models::Pattern.new("[#{Regexp.escape(from)}-#{Regexp.escape(to)}]")
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
@@ -121,6 +131,7 @@ module Regexer
     alias word_character has_word_character
     alias letter has_letter
     alias number has_number
+    alias ascii_character has_ascii_character
     alias consecutive has_consecutive
     alias none_or_consecutive has_none_or_consecutive
   end
