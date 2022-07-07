@@ -40,5 +40,29 @@ RSpec.describe "Regexer::Pattern #starts_with" do
       expected_value: /^(\.\+\*\?\^\$\(\)\[\]\{\}\|\\)/
     }
   ]
+
+  context "when single entity values are given" do
+    include_examples "contains method test examples", [
+      {
+        case: "when value given is a single character",
+        test_value: "@",
+        custom_assertion_message: "does not wrap the character in parentheses",
+        expected_value: /^@/
+      }
+    ]
+  end
+
+  context "when non-single entity values are given" do
+    context "when value is a non-single entity pattern object" do
+      let(:pattern_block) do
+        -> { starts_with consecutive letter from: "A", to: "z" }
+      end
+
+      it "wraps the pattern in parentheses" do
+        expect(pattern).to eq(/^([A-z]+)/)
+      end
+    end
+  end
+
   include_examples "contains method invalid value error test example", value: /test/
 end

@@ -7,6 +7,7 @@ require "regexer/validators/contains_value_validator"
 require "regexer/validators/ascii_character_validator"
 require "regexer/exceptions/no_block_given_error"
 require "regexer/models/pattern"
+require "regexer/utils/single_entity_checker"
 require "pry"
 
 module Regexer
@@ -18,23 +19,23 @@ module Regexer
     end
 
     def result
-      Regexer::Models::Pattern.new(@final_pattern)
+      Regexer::Models::Pattern.new(@final_pattern, single_entity: false)
     end
 
     private
 
     def has_consecutive(value)
-      pattern = extract_pattern(value)
+      pattern = contains(value)&.raw_pattern
 
-      pattern_object = Regexer::Models::Pattern.new(append_character_in_pattern(pattern, "+", -1))
+      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "+", -1), single_entity: false)
       update_final_pattern(pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
     def has_none_or_consecutive(value)
-      pattern = extract_pattern(value)
+      pattern = contains(value)&.raw_pattern
 
-      pattern_object = Regexer::Models::Pattern.new(append_character_in_pattern(pattern, "*", -1))
+      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "*", -1), single_entity: false)
       update_final_pattern(pattern, pattern_object.raw_pattern)
       pattern_object
     end
@@ -69,9 +70,16 @@ module Regexer
 
     def contains(value)
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
+
       sanitized_pattern = sanitize_pattern(value)
-      pattern_object = Regexer::Models::Pattern.new("(#{sanitized_pattern})")
-      update_final_pattern(sanitized_pattern, pattern_object.raw_pattern)
+
+      pattern_object = if ::Regexer::Utils::SingleEntityChecker.single_entity?(value)
+                         Regexer::Models::Pattern.new(sanitized_pattern)
+                       else
+                         Regexer::Models::Pattern.new("(#{sanitized_pattern})")
+                       end
+
+      update_final_pattern(pattern_object?(value) ? sanitized_pattern : "", pattern_object.raw_pattern)
       pattern_object
     end
 
@@ -86,18 +94,18 @@ module Regexer
     end
 
     def starts_with(value)
-      Regexer::Validators::ContainsValueValidator.value_valid?(value)
-      sanitized_pattern = sanitize_pattern(value)
-      pattern_object = Regexer::Models::Pattern.new("^(#{sanitized_pattern})")
-      update_final_pattern(sanitized_pattern, pattern_object.raw_pattern)
+      pattern = contains(value)&.raw_pattern
+
+      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "^", 0), single_entity: false)
+      update_final_pattern(pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
     def ends_with(value)
-      Regexer::Validators::ContainsValueValidator.value_valid?(value)
-      sanitized_pattern = sanitize_pattern(value)
-      pattern_object = Regexer::Models::Pattern.new("(#{sanitized_pattern})$")
-      update_final_pattern(sanitized_pattern, pattern_object.raw_pattern)
+      pattern = contains(value)&.raw_pattern
+
+      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "$", -1), single_entity: false)
+      update_final_pattern(pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
@@ -108,16 +116,8 @@ module Regexer
     end
 
     # UTILITIES
-    def append_character_in_pattern(pattern, character_to_insert, index)
+    def insert_character_in_pattern(pattern, character_to_insert, index)
       String.new(pattern).insert(index, character_to_insert)
-    end
-
-    def extract_pattern(value)
-      if value.instance_of?(Regexer::Models::Pattern)
-        value.raw_pattern
-      else
-        contains(value)&.raw_pattern
-      end
     end
 
     def sanitize_pattern(value)
@@ -130,13 +130,15 @@ module Regexer
     end
 
     def update_final_pattern(previous_appended_pattern, new_pattern)
-      previous_appended_pattern_regex = /(#{Regexp.escape(previous_appended_pattern)})$/
-
-      if @final_pattern.match?(previous_appended_pattern_regex)
-        @final_pattern.sub!(previous_appended_pattern_regex, new_pattern)
+      if !previous_appended_pattern.empty? && @final_pattern.end_with?(previous_appended_pattern)
+        @final_pattern.sub!(/(#{Regexp.escape(previous_appended_pattern)})$/) { new_pattern }
       else
         @final_pattern += new_pattern
       end
+    end
+
+    def pattern_object?(value)
+      value.instance_of?(::Regexer::Models::Pattern)
     end
 
     alias word_character has_word_character

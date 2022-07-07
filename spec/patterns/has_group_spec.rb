@@ -19,12 +19,12 @@ RSpec.describe "Regexer::Pattern #has_group" do
 
   context "when block is given" do
     it "builds regex pattern specified within a block and closes those in parenthesis" do
-      expect(pattern).to eq(/(\w+(@)[0-9])/)
+      expect(pattern).to eq(/(\w+@[0-9])/)
     end
 
     context "when alias method is used" do
       it "builds regex pattern specified within a block and closes those in parenthesis" do
-        expect(pattern).to eq(/(\w+(@)[0-9])/)
+        expect(pattern).to eq(/(\w+@[0-9])/)
       end
     end
 

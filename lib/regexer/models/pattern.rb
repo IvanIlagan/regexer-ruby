@@ -6,13 +6,18 @@ module Regexer
     class Pattern
       attr_reader :raw_pattern
 
-      def initialize(pattern, regex_escaped: true)
+      def initialize(pattern, regex_escaped: true, single_entity: true)
         @raw_pattern = pattern
         @regex_escaped = regex_escaped
+        @single_entity = single_entity
       end
 
       def regex_escaped?
         @regex_escaped
+      end
+
+      def single_entity?
+        @single_entity
       end
 
       def regex
