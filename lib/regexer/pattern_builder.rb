@@ -5,6 +5,7 @@ require "regexer/validators/letter_validator"
 require "regexer/validators/number_validator"
 require "regexer/validators/contains_value_validator"
 require "regexer/validators/ascii_character_validator"
+require "regexer/exceptions/no_block_given_error"
 require "regexer/models/pattern"
 require "pry"
 
@@ -74,6 +75,16 @@ module Regexer
       pattern_object
     end
 
+    def has_group(&block)
+      raise Regexer::Exceptions::NoBlockGivenError unless block_given?
+
+      value = Regexer::PatternBuilder.new(&block).result
+      sanitized_pattern = sanitize_pattern(value)
+      pattern_object = Regexer::Models::Pattern.new("(#{sanitized_pattern})")
+      update_final_pattern(sanitized_pattern, pattern_object.raw_pattern)
+      pattern_object
+    end
+
     def starts_with(value)
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
       sanitized_pattern = sanitize_pattern(value)
@@ -134,5 +145,6 @@ module Regexer
     alias ascii_character has_ascii_character
     alias consecutive has_consecutive
     alias none_or_consecutive has_none_or_consecutive
+    alias group has_group
   end
 end
