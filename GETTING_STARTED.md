@@ -10,11 +10,12 @@
     - [ASCII character in a given range](#ascii-character-in-a-given-range)
     - [Word Character](#word-character)
   - [Chainable Patterns](#chainable-patterns)
-    - [Group of characters](#group-of-characters)
+    - [Contains set of characters](#contains-set-of-characters)
     - [Starts with a group of characters](#starts-with-a-group-of-characters)
     - [Ends with a group of characters](#ends-with-a-group-of-characters)
     - [Consecutive group of characters](#consecutive-group-of-characters)
     - [None or consecutive group of characters](#none-or-consecutive-group-of-characters)
+    - [Group of characters/patterns](#group-of-characters-or-patterns)
 
 ## Building Patterns
 ## Layout
@@ -131,10 +132,8 @@ end
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
 ## Chainable patterns
-These are pattern methods that not only accepts strict set of data types but it also accepts a Regexer::Models::Pattern objects as arguments. What makes these methods chainable is that all of the methods used here all return a Regexer::Models::Pattern object. Given that, we can call another pattern method as the paramater instead of the other data types for more expressiveness.
-
-### Group of characters
-Just like in regex, regexer offers a method called contains that allows us to generate a pattern for finding groups of characters or substrings via the parenthesis in regex.
+### Contains set of characters
+This is a method in which it acts like directly adding the set of characters into the regex
 ```ruby
 Regexer::PatternBuilder.new do
   contains "test"
@@ -201,3 +200,19 @@ end
 ```
 
 It also functions the same as the contains method since it is being used by it behind the scenes to build the pattern and then the method itself just appends the '*' character at the end of it.
+
+### Group of characters or patterns
+Just like in regex, regexer offers a method called has_group or group that allows us to generate a pattern for finding groups of characters or substrings via the parentheses in regex.
+```ruby
+Regexer::PatternBuilder.new do
+  has_group do
+    has_letter from: "A", to: "z"
+    contains "@"
+    ends_with consecutive number from: 0, to: 9
+  end # builds "([A-z]@([0-9]+)$)"
+end
+```
+
+The method only accepts a block and that block acts similar to the PatternBuilder class in which
+we can build another set of pattern just within that certain context. Same errors will be raised
+when invalid values are given to the methods called within that block
