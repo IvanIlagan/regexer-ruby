@@ -55,6 +55,30 @@ RSpec.describe "Regexer::Pattern #has_consecutive" do
     end
   end
 
+  context "when single entity values are given" do
+    context "when value given is a single character" do
+      let!(:pattern_block) do
+        -> { has_consecutive "@" }
+      end
+
+      it "does not wrap the character in parentheses" do
+        expect(pattern).to eq(/@+/)
+      end
+    end
+  end
+
+  context "when non-single entity values are given" do
+    context "when value is a non-single entity pattern object" do
+      let(:pattern_block) do
+        -> { has_consecutive starts_with letter from: "A", to: "z" }
+      end
+
+      it "wraps the pattern in parentheses" do
+        expect(pattern).to eq(/(^[A-z])+/)
+      end
+    end
+  end
+
   context "when value is a DSL methods" do
     context "when value is 1 DSL methods: number" do
       let!(:pattern_block) do
@@ -71,8 +95,8 @@ RSpec.describe "Regexer::Pattern #has_consecutive" do
         -> { has_consecutive contains letter from: "A", to: "z" }
       end
 
-      it "returns /([A-z])+/ regex pattern" do
-        expect(pattern).to eq(/([A-z])+/)
+      it "returns /[A-z]+/ regex pattern" do
+        expect(pattern).to eq(/[A-z]+/)
       end
     end
   end

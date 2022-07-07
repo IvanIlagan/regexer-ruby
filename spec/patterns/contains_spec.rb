@@ -39,5 +39,60 @@ RSpec.describe "Regexer::Pattern #contains" do
       expected_value: /(\.\+\*\?\^\$\(\)\[\]\{\}\|\\)/
     }
   ]
+
+  context "when single entity values are given" do
+    include_examples "contains method test examples", [
+      {
+        case: "when value given is a single character",
+        test_value: "@",
+        custom_assertion_message: "adds the character as is in the final generated pattern",
+        expected_value: /@/
+      },
+      {
+        case: "when value given is a single digit number",
+        test_value: 9,
+        custom_assertion_message: "adds the number as is in the final generated pattern",
+        expected_value: /9/
+      }
+    ]
+
+    context "when value is a single entity pattern object" do
+      let(:pattern_block) do
+        -> { contains letter from: "A", to: "z" }
+      end
+
+      it "adds the pattern as is in the final generated pattern" do
+        expect(pattern).to eq(/[A-z]/)
+      end
+    end
+  end
+
+  context "when non-single entity values are given" do
+    include_examples "contains method test examples", [
+      {
+        case: "when value given is a set of character",
+        test_value: "hey",
+        custom_assertion_message: "wraps the set of characters in paretheses",
+        expected_value: /(hey)/
+      },
+      {
+        case: "when value given is a multi digit number",
+        test_value: 123,
+        custom_assertion_message: "wraps the multi digit number in paretheses",
+        expected_value: /(123)/
+      }
+    ]
+
+    context "when value is a non-single entity pattern object" do
+      let(:pattern_block) do
+        -> { contains consecutive letter from: "A", to: "z" }
+      end
+
+      it "wraps the pattern in parentheses" do
+        expect(pattern).to eq(/([A-z]+)/)
+      end
+    end
+  end
+
   include_examples "contains method invalid value error test example", value: /test/
 end
