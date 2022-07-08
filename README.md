@@ -29,19 +29,72 @@ Require Regexer in your ruby file and give a block to the instance of Regexer::P
 require 'regexer'
 
 # Build your regex patterns within a block right after instantiating Regexer::PatternBuilder class
-pattern = Regexer::PatternBuilder.new do
+pattern_builder = Regexer::PatternBuilder.new do
   has_letter from: "A", to: "z"
   has_number from: 0, to: 9
-end.result # Get the result of the pattern builder by calling the result method in which it returns a Regexer::Models::Pattern object
+end
 
-print pattern.raw_pattern
+pattern = pattern_builder.result # Get the result of the pattern builder by calling the result method in which it returns a Regexer::Models::Pattern object
+
+puts pattern.raw_pattern
 # outputs '/[A-z]+[0-9]+/'
 
-print pattern.regex
+puts pattern.regex
 # outputs /[A-z]+[0-9]+/
 ```
 
 See [GETTING_STARTED](./GETTING_STARTED.md) for indepth details on usage and the documentation for the available DSL methods.
+
+## Basic Examples
+Starts with repeating word "dog"
+```ruby
+require 'regexer'
+
+pattern_builder = Regexer::PatternBuilder.new do
+  starts_with consecutive "dog"
+end
+
+pattern = pattern_builder.result
+
+puts pattern.regex
+# outputs /^((dog)+)/
+```
+
+Basic Email Address
+```ruby
+require 'regexer'
+
+pattern_builder = Regexer::PatternBuilder.new do
+  has_consecutive word_character
+  contains "@"
+  has_consecutive word_character
+  contains "."
+  has_consecutive letter from: "a", to: "z"
+end
+
+pattern = pattern_builder.result
+
+puts pattern.regex
+# outputs /\w+@\w+\.[a-z]+/
+```
+
+Ends with consecutive group of patterns
+```ruby
+require 'regexer'
+
+pattern_builder = Regexer::PatternBuilder.new do
+  ends_with consecutive group {
+    has_ascii_character from: "<", to: "z"
+    contains "-"
+    has_number from: 4, to: 5
+  }
+end
+
+pattern = pattern_builder.result
+
+puts pattern.regex
+# outputs /(([<-z]\-[4-5])+)$/
+```
 
 ## Development
 
