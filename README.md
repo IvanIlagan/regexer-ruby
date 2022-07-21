@@ -37,10 +37,10 @@ end
 pattern = pattern_builder.result # Get the result of the pattern builder by calling the result method in which it returns a Regexer::Models::Pattern object
 
 puts pattern.raw_pattern
-# outputs '/[A-z]+[0-9]+/'
+# outputs '[A-z][0-9]'
 
 puts pattern.regex
-# outputs /[A-z]+[0-9]+/
+# outputs /[A-z][0-9]/
 ```
 
 See [GETTING_STARTED](./GETTING_STARTED.md) for indepth details on usage and the documentation for the available DSL methods.
