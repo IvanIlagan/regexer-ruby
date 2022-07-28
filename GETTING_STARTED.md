@@ -9,6 +9,7 @@
     - [Letter in a given range](#letter-in-a-given-range)
     - [Number in a given range](#number-in-a-given-range)
     - [ASCII character in a given range](#ascii-character-in-a-given-range)
+    - [Any character in a given set of characters](#any-character-in-a-given-set-of-characters)
     - [Word Character](#word-character)
   - [Chainable Patterns](#chainable-patterns)
     - [Contains set of characters](#contains-set-of-characters)
@@ -17,6 +18,7 @@
     - [Consecutive group of characters](#consecutive-group-of-characters)
     - [None or consecutive group of characters](#none-or-consecutive-group-of-characters)
     - [Group of characters/patterns](#group-of-characters-or-patterns)
+- [Value Builder Methods](#value-builder-methods)
 
 ## Terminologies
 - Pattern object
@@ -26,12 +28,15 @@
 
 - Standalone patterns
 
-    These are pattern methods that have no parameters or if given a parameter, they don't accept Regexer::Models::Pattern objects but accepts a strict set of values OR required set of keyword arguments. These methods can be used on their own OR as values
-    for other methods to make a chain.
+    These are pattern methods that have no parameters or if given a parameter, they don't accept Regexer::Models::Pattern objects but accepts a strict set of values OR required set of keyword arguments. These methods can be used on their own OR as values for other methods to make a chain.
 
 - Chainable Patterns
 
     These are pattern methods that not only accepts strict set of data types but it also accepts a Regexer::Models::Pattern objects as parameters. What makes these methods chainable is that all of the methods used here all return a Regexer::Models::Pattern object. Given that, we can call another pattern method to be used as the paramater instead of the other data types for added expressiveness.
+
+- Value Builder Methods
+
+    These are methods that helps in building values that are compatible to be accepted as parameters of the pattern methods.
 
 - Single Entity Value
 
@@ -137,7 +142,7 @@ The method requires 2 keyword arguments named from and to in which we can only a
 This method returns a single entity Regexer::Models::Pattern object
 
 ### ASCII character in a given range
-To extend the power of the range in regex, the has_ascii_character or ascii_character_method allows us to produce a pattern to check for characters within a range of the given ascii character.
+To extend the power of the range in regex, the has_ascii_character or ascii_character method allows us to produce a pattern to check for characters within a range of the given ascii character.
 
 ```ruby
 Regexer::PatternBuilder.new do
@@ -149,6 +154,38 @@ end
 The method requires 2 keyword arguments named from and to in which we can only assign a single character string that is in the ASCII table. The value for the from argument should always be lower than the to argument value. If an invalid value is given, an exception is raised.
 
 Keep in mind that there are characters in the ASCII table that has a special function in regex. So given that, this method automatically escapes those characters.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Any character in a given set of characters
+As the name suggests, we can build patterns to match any character in a given set using the has_any_character_in or any_character_in method. This method leverages the square bracket pairs in which it functions the same thing in regex.
+
+```ruby
+Regexer::PatternBuilder.new do
+  has_any_character_in "aeiou" # builds "[aeiou]"
+  any_character_id 2468        # builds "[2468]
+end
+```
+
+The method accepts String, Integer and Hash data types as its argument. Do take note that when we give the method a hash, it only accepts that hash IF it contains the 'from' and 'to' keys in that specific order. If any other data types or a hash with any other key names are given, an exception is raised. It will also raise an exception if it fails the value validation also, which is quite similar with the value validation of the has_ascii_character method.
+
+To lessen the burden of passing a manually made Hash and to add more readability, we can use the value builder method [character_range](#character-range) to build our Hash object.
+
+The method is not restricted to accept 1 parameter. It can actually take as many paramter as you want as to maximize the usage of the square brackets.
+
+```ruby
+# Multi params usage
+Regexer::PatternBuilder.new do
+  # Alphanumeric only character regex pattern sample
+  has_any_character_in character_range(from: 'A', to: 'Z'),
+                       character_range(from:'a', to: 'z'),
+                       character_range(from: '0', to: '9')       # builds [A-Za-z0-9]
+
+  has_any_character_in "dog",
+                        character_range(from: "!", to: "/"),
+                        12_345                                   # builds [dog!-/12345]
+end
+```
 
 This method returns a single entity Regexer::Models::Pattern object
 
@@ -260,3 +297,22 @@ we can build another set of pattern just within that certain context. Same error
 when invalid values are given to the methods called within that block
 
 This method returns a single entity Regexer::Models::Pattern object
+
+## Value Builder Methods
+## Character Range
+A method that builds a hash in the form: { from: value, to: value }
+
+This method will always return that specific hash structure that is already regex escaped.
+
+Do take note that this method runs value validations which is similar with the has_ascii_character method. If it didn't pass the value validation, this will raise an exception.
+
+Also, this method is only available within the context of the Regexer::PatternBuilder
+
+Usage
+```ruby
+Regexer::PatternBuilder.new do
+  character_range from: 'a', to: 'z'
+  has_any_character_in character_range from: 'a', to: 'z'
+end
+```
+

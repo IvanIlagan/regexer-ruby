@@ -27,3 +27,13 @@ Layout/ClassLength:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*_spec.rb'
+
+Metrics/MethodLength:
+  Max: 25
+
+Metrics/AbcSize:
+  Max: 20
+
+Layout/ArgumentAlignment:
+  Exclude:
+    - 'spec/**/*_spec.rb'
