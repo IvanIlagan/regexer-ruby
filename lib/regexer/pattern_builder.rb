@@ -5,6 +5,7 @@ require "regexer/validators/letter_validator"
 require "regexer/validators/number_validator"
 require "regexer/validators/contains_value_validator"
 require "regexer/validators/ascii_character_validator"
+require "regexer/validators/any_character_in_validator"
 require "regexer/exceptions/no_block_given_error"
 require "regexer/models/pattern"
 require "regexer/utils/single_entity_checker"
@@ -24,6 +25,25 @@ module Regexer
 
     private
 
+    # SPECIAL FUNCTION CHARACTERS
+    # MOSTLY IMPLEMENTATION OF SPECIAL CHARACTERS IN REGEX
+    def starts_with(value)
+      pattern = contains(value)&.raw_pattern
+
+      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "^", 0), single_entity: false)
+      update_final_pattern(pattern, pattern_object.raw_pattern)
+      pattern_object
+    end
+
+    def ends_with(value)
+      pattern = contains(value)&.raw_pattern
+
+      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "$", -1), single_entity: false)
+      update_final_pattern(pattern, pattern_object.raw_pattern)
+      pattern_object
+    end
+
+    # REGEX QUANTIFIERS
     def has_consecutive(value)
       pattern = contains(value)&.raw_pattern
 
@@ -40,7 +60,7 @@ module Regexer
       pattern_object
     end
 
-    # BASE PATTERNS
+    # BASIC EASE OF USE PATTERNS
     def has_letter(from:, to:)
       Regexer::Validators::LetterValidator.letter?(from)
       Regexer::Validators::LetterValidator.letter?(to)
@@ -64,6 +84,12 @@ module Regexer
       Regexer::Validators::AsciiCharacterValidator.ascii_character?(to)
       Regexer::Validators::FromToValidator.validate_range(from, to)
       pattern_object = Regexer::Models::Pattern.new("[#{Regexp.escape(from)}-#{Regexp.escape(to)}]")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
+    def has_word_character
+      pattern_object = Regexer::Models::Pattern.new("\\w")
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
@@ -93,26 +119,30 @@ module Regexer
       pattern_object
     end
 
-    def starts_with(value)
-      pattern = contains(value)&.raw_pattern
+    def has_any_character_in(*values)
+      combined_pattern = values.reduce("") do |pattern, value|
+        Regexer::Validators::AnyCharacterInValidator.value_valid?(value)
+        if value.instance_of?(Hash)
+          Regexer::Validators::AsciiCharacterValidator.ascii_character?(value[:from])
+          Regexer::Validators::AsciiCharacterValidator.ascii_character?(value[:to])
+          Regexer::Validators::FromToValidator.validate_range(value[:from], value[:to])
+          pattern + "#{value[:from]}-#{value[:to]}"
+        else
+          pattern + sanitize_pattern(value)
+        end
+      end
 
-      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "^", 0), single_entity: false)
-      update_final_pattern(pattern, pattern_object.raw_pattern)
-      pattern_object
-    end
-
-    def ends_with(value)
-      pattern = contains(value)&.raw_pattern
-
-      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "$", -1), single_entity: false)
-      update_final_pattern(pattern, pattern_object.raw_pattern)
-      pattern_object
-    end
-
-    def has_word_character
-      pattern_object = Regexer::Models::Pattern.new("\\w")
+      pattern_object = Regexer::Models::Pattern.new("[#{combined_pattern}]")
       @final_pattern += pattern_object.raw_pattern
       pattern_object
+    end
+
+    # VALUE BUILDER METHOD THAT IS COMPATIBILE WITH THE PATTERN BUILDER
+    def character_range(from:, to:)
+      Regexer::Validators::AsciiCharacterValidator.ascii_character?(from)
+      Regexer::Validators::AsciiCharacterValidator.ascii_character?(to)
+      Regexer::Validators::FromToValidator.validate_range(from, to)
+      { from: Regexp.escape(from), to: Regexp.escape(to) }
     end
 
     # UTILITIES
@@ -148,5 +178,6 @@ module Regexer
     alias consecutive has_consecutive
     alias none_or_consecutive has_none_or_consecutive
     alias group has_group
+    alias any_character_in has_any_character_in
   end
 end
