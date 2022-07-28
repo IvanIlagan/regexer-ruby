@@ -94,6 +94,12 @@ module Regexer
       pattern_object
     end
 
+    def _or_
+      pattern_object = Regexer::Models::Pattern.new("\|")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
     def contains(value)
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
 

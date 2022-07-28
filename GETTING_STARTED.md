@@ -10,6 +10,7 @@
     - [Number in a given range](#number-in-a-given-range)
     - [ASCII character in a given range](#ascii-character-in-a-given-range)
     - [Any character in a given set of characters](#any-character-in-a-given-set-of-characters)
+    - [Or](#or)
     - [Word Character](#word-character)
   - [Chainable Patterns](#chainable-patterns)
     - [Contains set of characters](#contains-set-of-characters)
@@ -186,6 +187,28 @@ Regexer::PatternBuilder.new do
                         12_345                                   # builds [dog!-/12345]
 end
 ```
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Or
+In regex, the special character '|' serves as matching a pattern matching either character before or after it. This exact character is represented by the \_or_ method.
+
+```ruby
+Regexer::PatternBuilder.new do
+  _or_  # builds |
+
+  # Building 1|2 pattern
+  # Multi-line
+  contains 1
+  _or_
+  contains 2
+
+  # Single line
+  contains 1; _or_; contains 2
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
 This method returns a single entity Regexer::Models::Pattern object
 
