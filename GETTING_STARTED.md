@@ -299,7 +299,7 @@ when invalid values are given to the methods called within that block
 This method returns a single entity Regexer::Models::Pattern object
 
 ## Value Builder Methods
-## Character Range
+### Character Range
 A method that builds a hash in the form: { from: value, to: value }
 
 This method will always return that specific hash structure that is already regex escaped.
