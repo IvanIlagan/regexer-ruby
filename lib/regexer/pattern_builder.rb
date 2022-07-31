@@ -60,6 +60,14 @@ module Regexer
       pattern_object
     end
 
+    def has_none_or_one_instance_of(value)
+      pattern = contains(value)&.raw_pattern
+
+      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "?", -1), single_entity: false)
+      update_final_pattern(pattern, pattern_object.raw_pattern)
+      pattern_object
+    end
+
     # BASIC EASE OF USE PATTERNS
     def has_letter(from:, to:)
       Regexer::Validators::LetterValidator.letter?(from)
@@ -183,6 +191,7 @@ module Regexer
     alias ascii_character has_ascii_character
     alias consecutive has_consecutive
     alias none_or_consecutive has_none_or_consecutive
+    alias none_or_one_instance_of has_none_or_one_instance_of
     alias group has_group
     alias any_character_in has_any_character_in
   end

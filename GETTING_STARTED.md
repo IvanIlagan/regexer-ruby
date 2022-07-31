@@ -18,6 +18,7 @@
     - [Ends with a group of characters](#ends-with-a-group-of-characters)
     - [Consecutive group of characters](#consecutive-group-of-characters)
     - [None or consecutive group of characters](#none-or-consecutive-group-of-characters)
+    - [None or one instance of character](#none-or-one-instance-of-character)
     - [Group of characters/patterns](#group-of-characters-or-patterns)
 - [Value Builder Methods](#value-builder-methods)
 
@@ -302,6 +303,20 @@ end
 ```
 
 It also functions the same as the contains method since it is being used by it behind the scenes to build the pattern and then the method itself just appends the '*' character at the end of it.
+
+### None or one instance of character
+In regex, we have the special character '?' that allows us to match a text that has none or one instance of character or group of characters. We can use that special character by calling the has_none_or_one_instance_of or none_or_one_instance_of method
+
+```ruby
+Regexer::PatternBuilder.new do
+  has_none_or_one_instance_of "t"      # builds "t?"
+  has_none_or_one_instance_of 1234     # builds "(1234)?"
+  none_or_one_instance_of 5.43         # builds "(5\\.43)?"
+  none_or_one_instance_of "+-/hey__$^" # builds "(\\+\\-/hey__\\$\\^)?"
+end
+```
+
+It also functions the same as the contains method since it is being used by it behind the scenes to build the pattern and then the method itself just appends the '?' character at the end of it.
 
 ### Group of characters or patterns
 Just like in regex, regexer offers a method called has_group or group that allows us to generate a pattern for finding groups of characters or substrings via the parentheses in regex.
