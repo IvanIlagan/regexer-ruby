@@ -6,7 +6,7 @@ RSpec.describe "Regexer::Pattern #has_group" do
   let(:pattern_block) do
     lambda do
       has_group do
-        has_consecutive word_character
+        has_consecutive_instances_of word_character
         contains "@"
         has_number from: 0, to: 9
       end

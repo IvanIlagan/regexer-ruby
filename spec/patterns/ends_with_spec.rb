@@ -55,7 +55,7 @@ RSpec.describe "Regexer::Pattern #ends_with" do
   context "when non-single entity values are given" do
     context "when value is a non-single entity pattern object" do
       let(:pattern_block) do
-        -> { ends_with consecutive letter from: "A", to: "z" }
+        -> { ends_with consecutive_instances_of letter from: "A", to: "z" }
       end
 
       it "wraps the pattern in parentheses" do

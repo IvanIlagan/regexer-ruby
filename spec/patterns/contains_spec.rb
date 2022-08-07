@@ -85,7 +85,7 @@ RSpec.describe "Regexer::Pattern #contains" do
 
     context "when value is a non-single entity pattern object" do
       let(:pattern_block) do
-        -> { contains consecutive letter from: "A", to: "z" }
+        -> { contains consecutive_instances_of letter from: "A", to: "z" }
       end
 
       it "wraps the pattern in parentheses" do

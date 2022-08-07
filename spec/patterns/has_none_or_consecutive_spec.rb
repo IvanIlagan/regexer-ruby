@@ -3,18 +3,18 @@
 require "regexer"
 require "pry"
 
-RSpec.describe "Regexer::Pattern #has_none_or_consecutive" do
+RSpec.describe "Regexer::Pattern #has_none_or_consecutive_instances_of" do
   let(:pattern_block) do
-    -> { has_none_or_consecutive nil }
+    -> { has_none_or_consecutive_instances_of nil }
   end
 
   subject(:pattern) do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
-  context "when none_or_consecutive alias method is used" do
+  context "when has_none_or_consecutive_instances_of alias method is used" do
     let!(:pattern_block) do
-      -> { none_or_consecutive "test" }
+      -> { has_none_or_consecutive_instances_of "test" }
     end
 
     it "returns /(test)*/ regex pattern" do
@@ -24,7 +24,7 @@ RSpec.describe "Regexer::Pattern #has_none_or_consecutive" do
 
   context "when value is only a string 'test'" do
     let!(:pattern_block) do
-      -> { has_none_or_consecutive "test" }
+      -> { has_none_or_consecutive_instances_of "test" }
     end
 
     it "returns /(test)*/ regex pattern" do
@@ -35,7 +35,7 @@ RSpec.describe "Regexer::Pattern #has_none_or_consecutive" do
   context "when value is only a number" do
     context "when the number is an int 12345" do
       let!(:pattern_block) do
-        -> { has_none_or_consecutive 12_345 }
+        -> { has_none_or_consecutive_instances_of 12_345 }
       end
 
       it "returns /(12345)*/ regex pattern" do
@@ -45,7 +45,7 @@ RSpec.describe "Regexer::Pattern #has_none_or_consecutive" do
 
     context "when the number is a float 56.23" do
       let!(:pattern_block) do
-        -> { has_none_or_consecutive 56.23 }
+        -> { has_none_or_consecutive_instances_of 56.23 }
       end
 
       it "returns /(56\.23)*/ regex pattern" do
@@ -57,7 +57,7 @@ RSpec.describe "Regexer::Pattern #has_none_or_consecutive" do
   context "when single entity values are given" do
     context "when value given is a single character" do
       let!(:pattern_block) do
-        -> { has_none_or_consecutive "@" }
+        -> { has_none_or_consecutive_instances_of "@" }
       end
 
       it "does not wrap the character in parentheses" do
@@ -69,7 +69,7 @@ RSpec.describe "Regexer::Pattern #has_none_or_consecutive" do
   context "when non-single entity values are given" do
     context "when value is a non-single entity pattern object" do
       let(:pattern_block) do
-        -> { has_none_or_consecutive starts_with letter from: "A", to: "z" }
+        -> { has_none_or_consecutive_instances_of starts_with letter from: "A", to: "z" }
       end
 
       it "wraps the pattern in parentheses" do
@@ -81,7 +81,7 @@ RSpec.describe "Regexer::Pattern #has_none_or_consecutive" do
   context "when value is a DSL methods" do
     context "when value is 1 DSL methods: number" do
       let!(:pattern_block) do
-        -> { has_none_or_consecutive number from: 0, to: 9 }
+        -> { has_none_or_consecutive_instances_of number from: 0, to: 9 }
       end
 
       it "returns /[0-9]*/ regex pattern" do
@@ -91,7 +91,7 @@ RSpec.describe "Regexer::Pattern #has_none_or_consecutive" do
 
     context "when value is 2 DSL methods chained together: contains letter" do
       let!(:pattern_block) do
-        -> { has_none_or_consecutive contains letter from: "A", to: "z" }
+        -> { has_none_or_consecutive_instances_of contains letter from: "A", to: "z" }
       end
 
       it "returns /[A-z]*/ regex pattern" do
@@ -102,7 +102,7 @@ RSpec.describe "Regexer::Pattern #has_none_or_consecutive" do
 
   context "when value is NOT a string or an integer or a float or a Regexer::Models::Pattern" do
     let!(:pattern_block) do
-      -> { has_none_or_consecutive(/(test)/) }
+      -> { has_none_or_consecutive_instances_of(/(test)/) }
     end
 
     it "raises InvalidValueError error with message 'Value should only be of type String or Integer or Float or Regexer::Models::Pattern'" do

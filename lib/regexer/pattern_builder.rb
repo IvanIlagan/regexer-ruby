@@ -9,6 +9,7 @@ require "regexer/validators/any_character_in_validator"
 require "regexer/exceptions/no_block_given_error"
 require "regexer/models/pattern"
 require "regexer/utils/single_entity_checker"
+require "regexer/utils/quantifier_value_generator"
 require "pry"
 
 module Regexer
@@ -24,6 +25,9 @@ module Regexer
     end
 
     private
+
+    # STRUCTS
+    ConsecutiveOptions = Struct.new(:exactly, :minimum, :maximum)
 
     # SPECIAL FUNCTION CHARACTERS
     # MOSTLY IMPLEMENTATION OF SPECIAL CHARACTERS IN REGEX
@@ -44,15 +48,21 @@ module Regexer
     end
 
     # REGEX QUANTIFIERS
-    def has_consecutive(value)
+    def has_consecutive_instances_of(value, exactly: nil, minimum: nil, maximum: nil)
       pattern = contains(value)&.raw_pattern
 
-      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "+", -1), single_entity: false)
+      quantifier_pattern = Regexer::Utils::QuantifierValueGenerator
+                           .generate(ConsecutiveOptions.new(exactly, minimum, maximum))
+      pattern_object = Regexer::Models::Pattern.new(
+        insert_character_in_pattern(pattern, quantifier_pattern, -1),
+        single_entity: false
+      )
+
       update_final_pattern(pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
-    def has_none_or_consecutive(value)
+    def has_none_or_consecutive_instances_of(value)
       pattern = contains(value)&.raw_pattern
 
       pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "*", -1), single_entity: false)
@@ -189,8 +199,8 @@ module Regexer
     alias letter has_letter
     alias number has_number
     alias ascii_character has_ascii_character
-    alias consecutive has_consecutive
-    alias none_or_consecutive has_none_or_consecutive
+    alias consecutive_instances_of has_consecutive_instances_of
+    alias none_or_consecutive_instances_of has_none_or_consecutive_instances_of
     alias none_or_one_instance_of has_none_or_one_instance_of
     alias group has_group
     alias any_character_in has_any_character_in
