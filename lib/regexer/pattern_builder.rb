@@ -127,6 +127,12 @@ module Regexer
       pattern_object
     end
 
+    def has_any_character_except_new_line
+      pattern_object = Regexer::Models::Pattern.new(".")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
     def contains(value)
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
 
@@ -182,6 +188,7 @@ module Regexer
     alias whitespace_character has_whitespace_character
     alias digit_character has_digit_character
     alias alphanumeric_character has_alphanumeric_character
+    alias any_character_except_new_line has_any_character_except_new_line
     alias letter has_letter
     alias number has_number
     alias ascii_character has_ascii_character

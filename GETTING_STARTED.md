@@ -15,6 +15,7 @@
     - [Whitespace Character](#whitespace-character)
     - [Digit Character](#digit-character)
     - [Alphanumeric Character](#alphanumeric-character)
+    - [Any Character Except Line Break](#any-character-except-line-break)
   - [Chainable Patterns](#chainable-patterns)
     - [Contains Set of Characters](#contains-set-of-characters)
     - [Starts With a Group of Characters](#starts-with-a-group-of-characters)
@@ -261,6 +262,19 @@ This is a method in which it builds the respective regex pattern for you in matc
 Regexer::PatternBuilder.new do
   has_alphanumeric_character # builds "[A-Za-z0-9]"
   alphanumeric_character     # builds "[A-Za-z0-9]"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Any Character Except Line Break
+In regex, there is a special character that matches any number character except line breaks and that is the . or Dot pattern. Regexer also offers that exact pattern via the has_any_character_except_new_line or any_character_except_new_line method.
+```ruby
+Regexer::PatternBuilder.new do
+  has_any_character_except_new_line # builds "."
+  any_character_except_new_line     # builds "."
 end
 ```
 
