@@ -14,6 +14,7 @@
     - [Word Character](#word-character)
     - [Whitespace Character](#whitespace-character)
     - [Digit Character](#digit-character)
+    - [Alphanumeric Character](#alphanumeric-character)
   - [Chainable Patterns](#chainable-patterns)
     - [Contains set of characters](#contains-set-of-characters)
     - [Starts with a group of characters](#starts-with-a-group-of-characters)
@@ -247,6 +248,19 @@ In regex, there is a special shorthand character that matches any number charact
 Regexer::PatternBuilder.new do
   has_digit_character # builds "\\d"
   digit_character     # builds "\\d"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Alphanumeric Character
+This is a method in which it builds the respective regex pattern for you in matching a text containing any alphanumeric pattern.
+```ruby
+Regexer::PatternBuilder.new do
+  has_alphanumeric_character # builds "[A-Za-z0-9]"
+  alphanumeric_character     # builds "[A-Za-z0-9]"
 end
 ```
 
