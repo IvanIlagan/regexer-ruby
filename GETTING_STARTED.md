@@ -275,18 +275,67 @@ The method behaves exactly the same with the contains method, the only differenc
 This method returns a non-single entity Regexer::Models::Pattern object
 
 ### Consecutive group of characters
-In regex, we have the special character '+' that allows us to match a text that has consecutive repeating character or group of characters. We can use that special character by calling the has_consecutive or consecutive method
+In regex, we have the special character '+' that allows us to match a text that has consecutive repeating character or group of characters. We can use that special character by calling the has_consecutive_instances_of or consecutive_instances_of method
 
 ```ruby
 Regexer::PatternBuilder.new do
-  has_consecutive "t"      # builds "t+"
-  has_consecutive 1234     # builds "(1234)+"
-  consecutive 5.43         # builds "(5\\.43)+"
-  consecutive "+-/hey__$^" # builds "(\\+\\-/hey__\\$\\^)+"
+  has_consecutive_instances_of "t"      # builds "t+"
+  has_consecutive_instances_of 1234     # builds "(1234)+"
+  consecutive_instances_of 5.43         # builds "(5\\.43)+"
+  consecutive_instances_of "+-/hey__$^" # builds "(\\+\\-/hey__\\$\\^)+"
 end
 ```
 
 It also functions the same as the contains method since it is being used by it behind the scenes to build the pattern and then the method itself just appends the '+' character at the end of it.
+
+Additionally, this method has multiple available options aside from the default which is matching consecutive repeating character or group of characters. The options are:
+
+- exactly
+- minimum
+- maximum
+
+All options will only accept integer as values. Otherwise, it will raise an error.
+
+Do keep in mind that when an option is specified, it follows a prioritization for generating the
+appropriate quantifier. The priority is as follows: exactly, minimum, maximum.
+
+For the exactly option, when given a number, the method will not use the '+' for building the regex pattern but instead it will use '{n}' so that the regex pattern will only
+match if the text has exactly the N number of consecutive instances of given character or group of characters.
+
+```ruby
+Regexer::PatternBuilder.new do
+  has_consecutive_instances_of "t", exactly: 4       # builds "t{4}"
+  has_consecutive_instances_of 1234, exactly: 2      # builds "(1234){2}"
+  consecutive_instances_of 5.43, exactly: 1          # builds "(5\\.43){1}"
+  consecutive_instances_of "+-/hey__$^", exactly: 10 # builds "(\\+\\-/hey__\\$\\^){10}"
+end
+```
+
+For the minimum option, when given a number, the method will not use the '+' for building the regex pattern but instead it will use '{n,}' so that the regex pattern will only
+match if the text has the minimum N number of consecutive instances or more of given character or group of characters.
+
+```ruby
+Regexer::PatternBuilder.new do
+  has_consecutive_instances_of "t", minimum: 4       # builds "t{4,}"
+  has_consecutive_instances_of 1234, minimum: 2      # builds "(1234){2,}"
+  consecutive_instances_of 5.43, minimum: 1          # builds "(5\\.43){1,}"
+  consecutive_instances_of "+-/hey__$^", minimum: 10 # builds "(\\+\\-/hey__\\$\\^){10,}"
+end
+```
+
+For the maximum option, this will require the minimum option to also be specified. If the minimum option is not specified, it will raise an error. When the required options are specified, the method will not use the '+' for building the regex pattern but instead it will use '{minN,maxN}' so that the regex pattern will only
+match if the text has the minimum N number & maximum N number of consecutive instances of given character or group of characters.
+
+Do take note that the minimum value should always be lower than the maximum value, else it will raise an error.
+
+```ruby
+Regexer::PatternBuilder.new do
+  has_consecutive_instances_of "t", minimum: 4, maximum: 7           # builds "t{4,7}"
+  has_consecutive_instances_of 1234, minimum: 2, maximum: 3          # builds "(1234){2,3}"
+  consecutive_instances_of 5.43, minimum: 1, maximum: 23             # builds "(5\\.43){1,23}"
+  consecutive_instances_of "+-/hey__$^", minimum: 10, maximum: 1500  # builds "(\\+\\-/hey__\\$\\^){10,1500}"
+end
+```
 
 This method returns a non-single entity Regexer::Models::Pattern object
 
