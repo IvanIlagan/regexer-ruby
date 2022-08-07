@@ -12,6 +12,7 @@
     - [Any character in a given set of characters](#any-character-in-a-given-set-of-characters)
     - [Or](#or)
     - [Word Character](#word-character)
+    - [Whitespace Character](#whitespace-character)
   - [Chainable Patterns](#chainable-patterns)
     - [Contains set of characters](#contains-set-of-characters)
     - [Starts with a group of characters](#starts-with-a-group-of-characters)
@@ -214,11 +215,24 @@ The method does not accept any arguments. We can freely call it as is in the pat
 This method returns a single entity Regexer::Models::Pattern object
 
 ### Word Character
-In regex, there is a special pattern that matches any alphanumeric character and underscore with just 2 characters and that is the \w or Word pattern. Regexer also offers that exact pattern via the has_word_character or word_character method.
+In regex, there is a special shorthand character that matches any alphanumeric character and underscore and that is the \w or Word pattern. Regexer also offers that exact pattern via the has_word_character or word_character method.
 ```ruby
 Regexer::PatternBuilder.new do
   has_word_character # builds "\\w"
   word_character     # builds "\\w"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Whitespace Character
+In regex, there is a special shorthand character that matches any whitespace characters like spaces, newline, tab etc.... and that is the \s or Whitespace pattern. Regexer also offers that exact pattern via the has_whitespace_character or whitespace_character method.
+```ruby
+Regexer::PatternBuilder.new do
+  has_whitespace_character # builds "\\s"
+  whitespace_character     # builds "\\s"
 end
 ```
 
