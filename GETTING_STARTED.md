@@ -13,6 +13,7 @@
     - [Or](#or)
     - [Word Character](#word-character)
     - [Whitespace Character](#whitespace-character)
+    - [Digit Character](#digit-character)
   - [Chainable Patterns](#chainable-patterns)
     - [Contains set of characters](#contains-set-of-characters)
     - [Starts with a group of characters](#starts-with-a-group-of-characters)
@@ -233,6 +234,19 @@ In regex, there is a special shorthand character that matches any whitespace cha
 Regexer::PatternBuilder.new do
   has_whitespace_character # builds "\\s"
   whitespace_character     # builds "\\s"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Digit Character
+In regex, there is a special shorthand character that matches any number character from 0 to 9 and that is the \d or Digit pattern. Regexer also offers that exact pattern via the has_digit_character or digit_character method.
+```ruby
+Regexer::PatternBuilder.new do
+  has_digit_character # builds "\\d"
+  digit_character     # builds "\\d"
 end
 ```
 
