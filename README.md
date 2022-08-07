@@ -1,6 +1,7 @@
 # Regexer
 
-A ruby DSL for building regex patterns in a human readable format. Regexer aims in making regex more easily read, learned and understood at first glance.
+A ruby DSL for building regex patterns in a human readable format. Regexer aims in making regex more easily read, learned and understood at first glance. Syntax wise, it is inspired
+by FactoryBot and RSpec
 
 ## Installation
 
@@ -51,7 +52,7 @@ Starts with repeating word "dog"
 require 'regexer'
 
 pattern_builder = Regexer::PatternBuilder.new do
-  starts_with consecutive "dog"
+  starts_with consecutive_instances_of "dog"
 end
 
 pattern = pattern_builder.result
@@ -65,11 +66,11 @@ Basic Email Address
 require 'regexer'
 
 pattern_builder = Regexer::PatternBuilder.new do
-  has_consecutive word_character
+  has_consecutive_instances_of word_character
   contains "@"
-  has_consecutive word_character
+  has_consecutive_instances_of word_character
   contains "."
-  has_consecutive letter from: "a", to: "z"
+  has_consecutive_instances_of letter from: "a", to: "z"
 end
 
 pattern = pattern_builder.result
@@ -83,7 +84,7 @@ Ends with consecutive group of patterns
 require 'regexer'
 
 pattern_builder = Regexer::PatternBuilder.new do
-  ends_with consecutive group {
+  ends_with consecutive_instances_of group {
     has_ascii_character from: "<", to: "z"
     contains "-"
     has_number from: 4, to: 5
@@ -96,6 +97,72 @@ puts pattern.regex
 # outputs /(([<-z]\-[4-5])+)$/
 ```
 
+Negative Numbers
+```ruby
+require 'regexer'
+
+pattern_builder = Regexer::PatternBuilder.new do
+  has_none_or_one_instance_of "-"
+  has_consecutive_instances_of digit_character
+end
+
+pattern = pattern_builder.result
+
+puts pattern.regex
+# outputs /\-?\d+/
+```
+
+DD/MM/YYYY Date Format
+```ruby
+require 'regexer'
+
+pattern_builder = Regexer::PatternBuilder.new do
+  starts_with group {
+    contains 0
+    has_number from: 1, to: 9
+    _or_
+    has_any_character_in 12
+    has_number from: 0, to: 9
+    _or_
+    contains 3
+    has_any_character_in "01" 
+  }
+  contains "/"
+  has_group {
+    contains 0
+    has_number from: 1, to: 9
+    _or_
+    contains 1
+    has_number from: 0, to: 2
+  }
+  contains "/"
+  ends_with consecutive_instances_of(digit_character, exactly: 4)
+end
+
+pattern = pattern_builder.result
+
+puts pattern.regex
+# outputs /\-?\d+/
+```
+
+Philippines Mobile Number Format (09XX XXX XXXX)
+```ruby
+require 'regexer'
+
+pattern_builder = Regexer::PatternBuilder.new do
+  contains "09"
+  has_consecutive_instances_of(digit_character, exactly: 2)
+  contains " "
+  has_consecutive_instances_of(digit_character, exactly: 3)
+  contains " "
+  has_consecutive_instances_of(digit_character, exactly: 4)
+end
+
+pattern = pattern_builder.result
+
+puts pattern.regex
+# outputs /(09)\d{2}\ \d{3}\ \d{4}/
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -104,7 +171,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/regexer. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/regexer/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/IvanIlagan/regexer-ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/IvanIlagan/regexer-ruby/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -112,4 +179,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Regexer project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/regexer/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Regexer project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/IvanIlagan/regexer-ruby/blob/master/CODE_OF_CONDUCT.md).
