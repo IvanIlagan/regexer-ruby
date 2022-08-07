@@ -1,15 +1,12 @@
-# frozen_string_literal: true
-
 require "regexer/validators/from_to_validator"
-require "regexer/validators/letter_validator"
-require "regexer/validators/number_validator"
 require "regexer/validators/contains_value_validator"
-require "regexer/validators/ascii_character_validator"
 require "regexer/validators/any_character_in_validator"
 require "regexer/exceptions/no_block_given_error"
 require "regexer/models/pattern"
 require "regexer/utils/single_entity_checker"
 require "regexer/utils/quantifier_value_generator"
+require "regexer/utils/pattern_sanitizer"
+require "regexer/utils/string_helper"
 require "pry"
 
 module Regexer
@@ -34,16 +31,16 @@ module Regexer
     def starts_with(value)
       pattern = contains(value)&.raw_pattern
 
-      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "^", 0), single_entity: false)
-      update_final_pattern(pattern, pattern_object.raw_pattern)
+      pattern_object = Regexer::Models::Pattern.new(String.new(pattern).insert(0, "^"), single_entity: false)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
     def ends_with(value)
       pattern = contains(value)&.raw_pattern
 
-      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "$", -1), single_entity: false)
-      update_final_pattern(pattern, pattern_object.raw_pattern)
+      pattern_object = Regexer::Models::Pattern.new(String.new(pattern).insert(-1, "$"), single_entity: false)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
@@ -54,53 +51,47 @@ module Regexer
       quantifier_pattern = Regexer::Utils::QuantifierValueGenerator
                            .generate(ConsecutiveOptions.new(exactly, minimum, maximum))
       pattern_object = Regexer::Models::Pattern.new(
-        insert_character_in_pattern(pattern, quantifier_pattern, -1),
+        String.new(pattern).insert(-1, quantifier_pattern),
         single_entity: false
       )
 
-      update_final_pattern(pattern, pattern_object.raw_pattern)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
     def has_none_or_consecutive_instances_of(value)
       pattern = contains(value)&.raw_pattern
 
-      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "*", -1), single_entity: false)
-      update_final_pattern(pattern, pattern_object.raw_pattern)
+      pattern_object = Regexer::Models::Pattern.new(String.new(pattern).insert(-1, "*"), single_entity: false)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
     def has_none_or_one_instance_of(value)
       pattern = contains(value)&.raw_pattern
 
-      pattern_object = Regexer::Models::Pattern.new(insert_character_in_pattern(pattern, "?", -1), single_entity: false)
-      update_final_pattern(pattern, pattern_object.raw_pattern)
+      pattern_object = Regexer::Models::Pattern.new(String.new(pattern).insert(-1, "?"), single_entity: false)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
     # BASIC EASE OF USE PATTERNS
     def has_letter(from:, to:)
-      Regexer::Validators::LetterValidator.letter?(from)
-      Regexer::Validators::LetterValidator.letter?(to)
-      Regexer::Validators::FromToValidator.validate_range(from, to)
+      Regexer::Validators::FromToValidator.valid_values?("letter", from, to)
       pattern_object = Regexer::Models::Pattern.new("[#{from}-#{to}]")
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_number(from:, to:)
-      Regexer::Validators::NumberValidator.number?(from)
-      Regexer::Validators::NumberValidator.number?(to)
-      Regexer::Validators::FromToValidator.validate_range(from, to)
+      Regexer::Validators::FromToValidator.valid_values?("number", from, to)
       pattern_object = Regexer::Models::Pattern.new("[#{from}-#{to}]")
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_ascii_character(from:, to:)
-      Regexer::Validators::AsciiCharacterValidator.ascii_character?(from)
-      Regexer::Validators::AsciiCharacterValidator.ascii_character?(to)
-      Regexer::Validators::FromToValidator.validate_range(from, to)
+      Regexer::Validators::FromToValidator.valid_values?("ascii_character", from, to)
       pattern_object = Regexer::Models::Pattern.new("[#{Regexp.escape(from)}-#{Regexp.escape(to)}]")
       @final_pattern += pattern_object.raw_pattern
       pattern_object
@@ -121,7 +112,7 @@ module Regexer
     def contains(value)
       Regexer::Validators::ContainsValueValidator.value_valid?(value)
 
-      sanitized_pattern = sanitize_pattern(value)
+      sanitized_pattern = Regexer::Utils::PatternSanitizer.sanitize(value)
 
       pattern_object = if ::Regexer::Utils::SingleEntityChecker.single_entity?(value)
                          Regexer::Models::Pattern.new(sanitized_pattern)
@@ -129,7 +120,11 @@ module Regexer
                          Regexer::Models::Pattern.new("(#{sanitized_pattern})")
                        end
 
-      update_final_pattern(pattern_object?(value) ? sanitized_pattern : "", pattern_object.raw_pattern)
+      Regexer::Utils::StringHelper.update_string_pattern(
+        @final_pattern,
+        value.instance_of?(::Regexer::Models::Pattern) ? sanitized_pattern : "",
+        pattern_object.raw_pattern
+      )
       pattern_object
     end
 
@@ -137,9 +132,9 @@ module Regexer
       raise Regexer::Exceptions::NoBlockGivenError unless block_given?
 
       value = Regexer::PatternBuilder.new(&block).result
-      sanitized_pattern = sanitize_pattern(value)
+      sanitized_pattern = Regexer::Utils::PatternSanitizer.sanitize(value)
       pattern_object = Regexer::Models::Pattern.new("(#{sanitized_pattern})")
-      update_final_pattern(sanitized_pattern, pattern_object.raw_pattern)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, sanitized_pattern, pattern_object.raw_pattern)
       pattern_object
     end
 
@@ -147,12 +142,10 @@ module Regexer
       combined_pattern = values.reduce("") do |pattern, value|
         Regexer::Validators::AnyCharacterInValidator.value_valid?(value)
         if value.instance_of?(Hash)
-          Regexer::Validators::AsciiCharacterValidator.ascii_character?(value[:from])
-          Regexer::Validators::AsciiCharacterValidator.ascii_character?(value[:to])
-          Regexer::Validators::FromToValidator.validate_range(value[:from], value[:to])
+          Regexer::Validators::FromToValidator.valid_values?("ascii_character", value[:from], value[:to])
           pattern + "#{value[:from]}-#{value[:to]}"
         else
-          pattern + sanitize_pattern(value)
+          pattern + Regexer::Utils::PatternSanitizer.sanitize(value)
         end
       end
 
@@ -163,36 +156,8 @@ module Regexer
 
     # VALUE BUILDER METHOD THAT IS COMPATIBILE WITH THE PATTERN BUILDER
     def character_range(from:, to:)
-      Regexer::Validators::AsciiCharacterValidator.ascii_character?(from)
-      Regexer::Validators::AsciiCharacterValidator.ascii_character?(to)
-      Regexer::Validators::FromToValidator.validate_range(from, to)
+      Regexer::Validators::FromToValidator.valid_values?("ascii_character", from, to)
       { from: Regexp.escape(from), to: Regexp.escape(to) }
-    end
-
-    # UTILITIES
-    def insert_character_in_pattern(pattern, character_to_insert, index)
-      String.new(pattern).insert(index, character_to_insert)
-    end
-
-    def sanitize_pattern(value)
-      if value.instance_of?(Regexer::Models::Pattern)
-        sanitize_pattern(value.raw_pattern) unless value.regex_escaped?
-        value.raw_pattern
-      else
-        Regexp.escape(value.to_s)
-      end
-    end
-
-    def update_final_pattern(previous_appended_pattern, new_pattern)
-      if !previous_appended_pattern.empty? && @final_pattern.end_with?(previous_appended_pattern)
-        @final_pattern.sub!(/(#{Regexp.escape(previous_appended_pattern)})$/) { new_pattern }
-      else
-        @final_pattern += new_pattern
-      end
-    end
-
-    def pattern_object?(value)
-      value.instance_of?(::Regexer::Models::Pattern)
     end
 
     alias word_character has_word_character

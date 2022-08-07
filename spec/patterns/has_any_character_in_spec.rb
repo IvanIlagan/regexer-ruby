@@ -64,7 +64,7 @@ RSpec.describe "Regexer::Pattern #has_any_character_in" do
         end
 
         it "raises InvalidValueError error" do
-          expect { pattern }.to raise_error(Regexer::Exceptions::InvalidFromToRangeError)
+          expect { pattern }.to raise_error(RangeError)
         end
       end
 

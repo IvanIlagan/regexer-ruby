@@ -11,12 +11,16 @@ module Regexer
         raise Regexer::Exceptions::InvalidValueError, error_message unless integer?(value) && in_0_to_9?(value)
       end
 
-      def self.integer?(value)
-        value.instance_of?(Integer)
-      end
+      class << self
+        private
 
-      def self.in_0_to_9?(value)
-        (0..9).to_a.include?(value)
+        def integer?(value)
+          value.instance_of?(Integer)
+        end
+
+        def in_0_to_9?(value)
+          (0..9).to_a.include?(value)
+        end
       end
     end
   end

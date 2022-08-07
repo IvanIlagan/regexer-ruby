@@ -18,7 +18,7 @@ module Regexer
         raise RangeError, error_message unless min_value < max_value
       end
 
-      def self.integer?(value)
+      private_class_method def self.integer?(value)
         value.instance_of?(Integer)
       end
     end
