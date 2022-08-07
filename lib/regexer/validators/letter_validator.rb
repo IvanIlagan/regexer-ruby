@@ -11,12 +11,16 @@ module Regexer
         raise Regexer::Exceptions::InvalidValueError, error_message unless string?(value) && single_letter?(value)
       end
 
-      def self.string?(value)
-        value.instance_of?(String)
-      end
+      class << self
+        private
 
-      def self.single_letter?(value)
-        value.length == 1 && value.match?(/[[:alpha:]]/)
+        def string?(value)
+          value.instance_of?(String)
+        end
+
+        def single_letter?(value)
+          value.length == 1 && value.match?(/[[:alpha:]]/)
+        end
       end
     end
   end

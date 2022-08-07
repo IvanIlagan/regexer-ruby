@@ -28,10 +28,10 @@ RSpec.shared_examples "has_letters method invalid From-To Value Range Error" do 
     let!(:value1) { from_value }
     let!(:value2) { to_value }
 
-    it "raises a InvalidFromToRangeError error" do
+    it "raises a RangeError error" do
       expect do
         pattern
-      end.to raise_error(Regexer::Exceptions::InvalidFromToRangeError)
+      end.to raise_error(RangeError)
     end
   end
 end

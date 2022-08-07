@@ -12,20 +12,20 @@ module Regexer
         raise Regexer::Exceptions::InvalidValueError, error_message unless valid?(value)
       end
 
-      def self.number?(value)
-        value.instance_of?(Integer) || value.instance_of?(Float)
-      end
-
-      def self.string?(value)
-        value.instance_of?(String)
-      end
-
-      def self.pattern?(value)
-        value.instance_of?(Regexer::Models::Pattern)
-      end
-
       class << self
         private
+
+        def number?(value)
+          value.instance_of?(Integer) || value.instance_of?(Float)
+        end
+
+        def string?(value)
+          value.instance_of?(String)
+        end
+
+        def pattern?(value)
+          value.instance_of?(Regexer::Models::Pattern)
+        end
 
         def valid?(value)
           number?(value) || string?(value) || pattern?(value)

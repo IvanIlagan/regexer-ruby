@@ -12,20 +12,20 @@ module Regexer
         raise Regexer::Exceptions::InvalidValueError, error_message unless valid?(value)
       end
 
-      def self.number?(value)
-        value.instance_of?(Integer) || value.instance_of?(Float)
-      end
-
-      def self.string?(value)
-        value.instance_of?(String)
-      end
-
-      def self.from_to_hash?(value)
-        value.instance_of?(Hash) && value.keys == %i[from to]
-      end
-
       class << self
         private
+
+        def number?(value)
+          value.instance_of?(Integer) || value.instance_of?(Float)
+        end
+
+        def string?(value)
+          value.instance_of?(String)
+        end
+
+        def from_to_hash?(value)
+          value.instance_of?(Hash) && value.keys == %i[from to]
+        end
 
         def valid?(value)
           number?(value) || string?(value) || from_to_hash?(value)
