@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "regexer"
-require "./spec/shared_examples/shared_examples_for_has_word_character_test"
+require "./spec/shared_examples/shared_examples_for_shorthand_character_test"
 
-RSpec.describe "Regexer::Pattern #contains" do
+RSpec.describe "Regexer::Pattern #has_word_character" do
   let(:pattern_block) do
     -> { has_word_character }
   end
@@ -12,7 +12,7 @@ RSpec.describe "Regexer::Pattern #contains" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
-  include_examples "has_word_character method test examples", [
+  include_examples "shorthand character method test examples", "\\w", [
     {
       case: "when has_word_character is used",
       expected_value: /\w/
@@ -28,6 +28,10 @@ RSpec.describe "Regexer::Pattern #contains" do
     {
       case: "when string being matched is 'test!_123@yahoo.com'",
       test_value: "test!_123@yahoo.com"
+    },
+    {
+      case: "when string being matched is '^&@'",
+      fail_value: "^&@"
     }
   ]
 

@@ -43,6 +43,8 @@ RSpec.describe "Regexer::Pattern #has_any_character_in" do
 
         # LUCKILY REGEX DOESN'T INTERPRET SPECIAL CHARACTERS
         # IT JUST TAKES IT AS IS
+        # EXCEPTION THOUGH IS THE ^ SYMBOL SINCE IT MEANS NEGATION IF SPECIFIED
+        # AS THE FIRST CHARACTER
         it "builds /[--^]/ regex pattern unescaped" do
           expect(pattern).to eq(/[--^]/)
         end
