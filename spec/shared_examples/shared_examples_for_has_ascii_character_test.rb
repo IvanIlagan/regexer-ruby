@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "has_ascii_character method test example" do |from_value:, to_value:, expected_value:|
-  context "when creating a regex pattern for matching a ascii character in a range #{from_value} - #{to_value}" do
+  context "when creating a regex pattern for matching an ascii character in a range #{from_value} - #{to_value}" do
     let!(:value1) { from_value }
     let!(:value2) { to_value }
 
@@ -41,11 +41,11 @@ RSpec.shared_examples "has_ascii_character method invalid From-To Value Error" d
     let!(:value1) { from_value }
     let!(:value2) { to_value }
 
-    it "raises InvalidValueError error with 'Value should only be a single letter' as error message" do
+    it "raises InvalidValueError error with 'Value should only be a single character in the ascii table' as error message" do
       expect do
         pattern
       end.to raise_error(Regexer::Exceptions::InvalidValueError)
-        .with_message("Value should only be a single character in ascii table")
+        .with_message("Value should only be a single character in the ascii table")
     end
   end
 end

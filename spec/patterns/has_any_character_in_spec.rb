@@ -75,11 +75,11 @@ RSpec.describe "Regexer::Pattern #has_any_character_in" do
           -> { has_any_character_in({ from: 2, to: /test/ }) }
         end
 
-        it "raises InvalidValueError error with 'Value should only be a single character in ascii table' as error message" do
+        it "raises InvalidValueError error with 'Value should only be a single character in the ascii table' as error message" do
           expect do
             pattern
           end.to raise_error(Regexer::Exceptions::InvalidValueError)
-            .with_message("Value should only be a single character in ascii table")
+            .with_message("Value should only be a single character in the ascii table")
         end
       end
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples "has_numbers method test example" do |from_value:, to_value:, expected_value:|
+RSpec.shared_examples "has_number method test example" do |from_value:, to_value:, expected_value:|
   context "when creating a regex pattern for matching a number in a range #{from_value}-#{to_value}" do
     let!(:value1) { from_value }
     let!(:value2) { to_value }
@@ -23,7 +23,7 @@ RSpec.shared_examples "has_numbers method test example" do |from_value:, to_valu
   end
 end
 
-RSpec.shared_examples "has_numbers method invalid From-To Value Range Error" do |from_value:, to_value:|
+RSpec.shared_examples "has_number method invalid From-To Value Range Error" do |from_value:, to_value:|
   context "when From value is greater than the To value" do
     let!(:value1) { from_value }
     let!(:value2) { to_value }
@@ -36,7 +36,7 @@ RSpec.shared_examples "has_numbers method invalid From-To Value Range Error" do 
   end
 end
 
-RSpec.shared_examples "has_numbers method invalid From-To Value Error" do |from_value:, to_value:|
+RSpec.shared_examples "has_number method invalid From-To Value Error" do |from_value:, to_value:|
   context "when From value or To value is NOT an integer from 0 to 9" do
     let!(:value1) { from_value }
     let!(:value2) { to_value }

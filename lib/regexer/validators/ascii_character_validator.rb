@@ -7,7 +7,7 @@ module Regexer
     # A Validator Class for validating if a value is a single letter
     class AsciiCharacterValidator
       def self.ascii_character?(value)
-        error_message = "Value should only be a single character in ascii table"
+        error_message = "Value should only be a single character in the ascii table"
         raise Regexer::Exceptions::InvalidValueError, error_message unless string?(value) && single_ascii_letter?(value)
       end
 
