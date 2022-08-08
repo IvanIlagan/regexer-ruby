@@ -50,7 +50,7 @@ RSpec.describe "Regexer::Pattern #has_consecutive_instances_of" do
         -> { has_consecutive_instances_of 56.23 }
       end
 
-      it "returns /(56\.23)+/ regex pattern" do
+      it "returns /(56\\.23)+/ regex pattern" do
         expect(pattern).to eq(/(56\.23)+/)
       end
     end
@@ -80,8 +80,8 @@ RSpec.describe "Regexer::Pattern #has_consecutive_instances_of" do
     end
   end
 
-  context "when value is a DSL methods" do
-    context "when value is 1 DSL methods: number" do
+  context "when value is a DSL method" do
+    context "when value is 1 DSL method: number" do
       let!(:pattern_block) do
         -> { has_consecutive_instances_of number from: 0, to: 9 }
       end

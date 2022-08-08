@@ -48,7 +48,7 @@ RSpec.describe "Regexer::Pattern #has_none_or_one_instance_of" do
         -> { has_none_or_one_instance_of 56.23 }
       end
 
-      it "returns /(56\.23)?/ regex pattern" do
+      it "returns /(56\\.23)?/ regex pattern" do
         expect(pattern).to eq(/(56\.23)?/)
       end
     end
