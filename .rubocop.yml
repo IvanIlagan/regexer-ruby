@@ -19,6 +19,7 @@ Layout/LineLength:
   Max: 120
   Exclude:
     - 'spec/**/*.rb'
+    - 'regexer.gemspec'
 
 Layout/ClassLength:
   Exclude:
