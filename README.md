@@ -142,7 +142,7 @@ end
 pattern = pattern_builder.result
 
 puts pattern.regex
-# outputs /\-?\d+/
+# outputs /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/
 ```
 
 Philippines Mobile Number Format (09XX XXX XXXX)
