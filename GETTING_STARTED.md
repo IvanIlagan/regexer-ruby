@@ -80,11 +80,11 @@ end
 In addition, you can chain the pattern methods together to build a much more customized human readable pattern. Mix and match the pattern methods based on your needs and expressiveness.
 ```ruby
 Regexer::PatternBuilder.new do
-  starts_with consecutive letter from: "A", to: "z" # builds "^([A-z]+)"
-  contains number from: 0, to: 9                    # builds "([0-9])"
+  starts_with consecutive_instances_of letter from: "A", to: "z" # builds "^([A-z]+)"
+  contains number from: 0, to: 9                                 # builds "[0-9]"
 end
 
-# Based on the above pattern, it will have this as the final built pattern: "^([A-z]+)([0-9])"
+# Based on the above pattern, it will have this as the final built pattern: "^([A-z]+)[0-9]"
 ```
 
 So far, very few methods allow that kind of chain. See [here](#chainable-patterns) for the full list of chainable pattern methods
@@ -105,13 +105,13 @@ pattern_builder_result = Regexer::PatternBuilder.new do
   ends_with "Bye"               # builds "(Bye)$"
 end.result
 
-puts patter_builder_result.raw_pattern
+puts pattern_builder_result.raw_pattern
 # outputs "^(Hi!)[A-z][0-9](Bye)$"
-puts "Hello".match?(patter_builder_result.regex)
+puts "Hello".match?(pattern_builder_result.regex)
 # outputs /^(Hi!)[A-z][0-9](Bye)$/
 ```
 
-Take not that the PatternBuilder#result returns a non-single entity Regexer::Models::Pattern object
+Take note that the PatternBuilder#result returns a non-single entity Regexer::Models::Pattern object
 
 ## Patterns
 ## Standalone Patterns
@@ -169,7 +169,7 @@ As the name suggests, we can build patterns to match any character in a given se
 ```ruby
 Regexer::PatternBuilder.new do
   has_any_character_in "aeiou" # builds "[aeiou]"
-  any_character_id 2468        # builds "[2468]
+  any_character_in 2468        # builds "[2468]
 end
 ```
 
@@ -177,7 +177,7 @@ The method accepts String, Integer and Hash data types as its argument. Do take 
 
 To lessen the burden of passing a manually made Hash and to add more readability, we can use the value builder method [character_range](#character-range) to build our Hash object.
 
-The method is not restricted to accept 1 parameter. It can actually take as many paramter as you want as to maximize the usage of the square brackets.
+The method is not restricted to accept 1 parameter. It can actually take as many parameter as you want as to maximize the usage of the square brackets.
 
 ```ruby
 # Multi params usage
@@ -396,14 +396,14 @@ end
 This method returns a non-single entity Regexer::Models::Pattern object
 
 ### None or Consecutive Group of Characters
-In regex, we have the special character '*' that allows us to match a text that has none or consecutive repeating character or group of characters. We can use that special character by calling the has_none_or_consecutive or none_or_consecutive method
+In regex, we have the special character '*' that allows us to match a text that has none or consecutive repeating character or group of characters. We can use that special character by calling the has_none_or_consecutive_instances_of or none_or_consecutive_instances_of method
 
 ```ruby
 Regexer::PatternBuilder.new do
-  has_none_or_consecutive "t"      # builds "t*"
-  has_none_or_consecutive 1234     # builds "(1234)*"
-  none_or_consecutive 5.43         # builds "(5\\.43)*"
-  none_or_consecutive "+-/hey__$^" # builds "(\\+\\-/hey__\\$\\^)*"
+  has_none_or_consecutive_instances_of "t"      # builds "t*"
+  has_none_or_consecutive_instances_of 1234     # builds "(1234)*"
+  none_or_consecutive_instances_of 5.43         # builds "(5\\.43)*"
+  none_or_consecutive_instances_of "+-/hey__$^" # builds "(\\+\\-/hey__\\$\\^)*"
 end
 ```
 
@@ -430,7 +430,7 @@ Regexer::PatternBuilder.new do
   has_group do
     has_letter from: "A", to: "z"
     contains "@"
-    ends_with consecutive number from: 0, to: 9
+    ends_with consecutive_instances_of number from: 0, to: 9
   end # builds "([A-z]@([0-9]+)$)"
 end
 ```
