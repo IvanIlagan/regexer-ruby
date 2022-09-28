@@ -178,6 +178,13 @@ module Regexer
       pattern_object
     end
 
+    def has_any_character_not_in(*values)
+      pattern = has_any_character_in(*values)&.raw_pattern
+
+      pattern_object = Regexer::Models::Pattern.new(String.new(pattern).insert(1, "^"), single_entity: true)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
+    end
+
     # VALUE BUILDER METHOD THAT IS COMPATIBILE WITH THE PATTERN BUILDER
     def character_range(from:, to:)
       Regexer::Validators::FromToValidator.valid_values?("ascii_character", from, to)
@@ -197,5 +204,6 @@ module Regexer
     alias none_or_one_instance_of has_none_or_one_instance_of
     alias group has_group
     alias any_character_in has_any_character_in
+    alias any_character_not_in has_any_character_not_in
   end
 end

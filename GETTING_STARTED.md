@@ -10,6 +10,7 @@
     - [Number In a Given Range](#number-in-a-given-range)
     - [ASCII Character In a Given Range](#ascii-character-in-a-given-range)
     - [Any Character In a Given Set of Characters](#any-character-in-a-given-set-of-characters)
+    - [Any Character Not In a Given Set of Characters](#any-character-not-in-a-given-set-of-characters)
     - [Or](#or)
     - [Word Character](#word-character)
     - [Whitespace Character](#whitespace-character)
@@ -192,6 +193,33 @@ Regexer::PatternBuilder.new do
                         12_345                                   # builds [dog!-/12345]
 end
 ```
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Any Character Not In a Given Set of Characters
+This is the inverse of the has_any_character_in method of regexer. This just adds the unescaped '^' character as the first entry in the square brackets to denote in regex that any character in the square brackets should not exist in the string being matched. We can use this functionality by calling the has_any_character_not_in or any_character_not_in method.
+
+```ruby
+# Single params usage
+Regexer::PatternBuilder.new do
+  has_any_character_not_in "aeiou" # builds "[^aeiou]"
+  any_character_not_in 2468        # builds "[^2468]
+end
+
+# Multi params usage
+Regexer::PatternBuilder.new do
+  # Alphanumeric only character regex pattern sample
+  has_any_character_not_in character_range(from: 'A', to: 'Z'),
+                           character_range(from: 'a', to: 'z'),
+                           character_range(from: '0', to: '9')      # builds [^A-Za-z0-9]
+
+  has_any_character_not_in "dog",
+                           character_range(from: "!", to: "/"),
+                           12_345                                   # builds [^dog!-/12345]
+end
+```
+
+The method functions the same as with the has_any_character_in method like they have the same argument data types, argument values and validations.
 
 This method returns a single entity Regexer::Models::Pattern object
 
