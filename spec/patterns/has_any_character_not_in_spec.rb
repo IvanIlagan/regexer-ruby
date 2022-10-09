@@ -47,12 +47,8 @@ RSpec.describe "Regexer::Pattern #has_any_character_not_in" do
           -> { has_any_character_not_in({ from: "-", to: "^" }) }
         end
 
-        # LUCKILY REGEX DOESN'T INTERPRET SPECIAL CHARACTERS
-        # IT JUST TAKES IT AS IS
-        # EXCEPTION THOUGH IS THE ^ SYMBOL SINCE IT MEANS NEGATION IF SPECIFIED
-        # AS THE FIRST CHARACTER
-        it "builds /[^--^]/ regex pattern unescaped" do
-          expect(pattern).to eq(/[^--^]/)
+        it "builds /[^\\--\\^]/ regex pattern unescaped" do
+          expect(pattern).to eq(/[^\--\^]/)
         end
       end
 
@@ -142,12 +138,12 @@ RSpec.describe "Regexer::Pattern #has_any_character_not_in" do
     end
   end
 
-  context "when value is NOT a string or an integer or a hash with from & to keys" do
+  context "when value is NOT a string or an integer or float or a CharacterRangePattern object or a hash with from & to keys" do
     let!(:val) { /test/ }
 
     it "raises InvalidValueError error" do
       expect { pattern }.to raise_error(Regexer::Exceptions::InvalidValueError)
-        .with_message("Value should only be of type String or Integer or Hash with from & to keys")
+        .with_message("Value should only be of type String or Integer or Float or Regexer::Models::CharacterRangePattern or Hash with from & to keys")
     end
   end
 
@@ -157,7 +153,7 @@ RSpec.describe "Regexer::Pattern #has_any_character_not_in" do
 
       it "raises InvalidValueError error" do
         expect { pattern }.to raise_error(Regexer::Exceptions::InvalidValueError)
-          .with_message("Value should only be of type String or Integer or Hash with from & to keys")
+          .with_message("Value should only be of type String or Integer or Float or Regexer::Models::CharacterRangePattern or Hash with from & to keys")
       end
     end
 
@@ -166,7 +162,7 @@ RSpec.describe "Regexer::Pattern #has_any_character_not_in" do
 
       it "raises InvalidValueError error" do
         expect { pattern }.to raise_error(Regexer::Exceptions::InvalidValueError)
-          .with_message("Value should only be of type String or Integer or Hash with from & to keys")
+          .with_message("Value should only be of type String or Integer or Float or Regexer::Models::CharacterRangePattern or Hash with from & to keys")
       end
     end
   end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "regexer"
+require "regexer/models/character_range_pattern"
 
 RSpec.describe "Regexer::Pattern #character_range" do
   let(:value1) { nil }
@@ -19,17 +20,22 @@ RSpec.describe "Regexer::Pattern #character_range" do
       let!(:value1) { "A" }
       let!(:value2) { "z" }
 
-      it "returns { from: 'A', to: 'z' } hash with regex escaped values" do
-        expect(return_value).to eq({ from: "A", to: "z" })
+      it "returns CharacterRangePattern object with regex escaped values" do
+        expect(return_value).to be_a Regexer::Models::CharacterRangePattern
+        expect(return_value.from).to eq value1
+        expect(return_value.to).to eq value2
       end
     end
 
-    context "when From value is '<' and To value is '}'" do
-      let!(:value1) { "<" }
-      let!(:value2) { "}" }
+    context "when From AND To values are special regex characters" do
+      context "when From value is '^' and To value is '}'" do
+        let!(:value1) { "^" }
+        let!(:value2) { "}" }
 
-      it "returns { from: '<', to: '\\}' } hash with regex escaped values" do
-        expect(return_value).to eq({ from: "<", to: "\\}" })
+        it "returns CharacterRangePattern object with regex escaped values" do
+          expect(return_value.from).to eq "\\#{value1}"
+          expect(return_value.to).to eq "\\#{value2}"
+        end
       end
     end
 
