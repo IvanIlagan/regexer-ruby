@@ -3,10 +3,12 @@ require "regexer/validators/contains_value_validator"
 require "regexer/validators/any_character_in_validator"
 require "regexer/exceptions/no_block_given_error"
 require "regexer/models/pattern"
+require "regexer/models/character_range_pattern"
 require "regexer/utils/single_entity_checker"
 require "regexer/utils/quantifier_value_generator"
 require "regexer/utils/pattern_sanitizer"
 require "regexer/utils/string_helper"
+require "regexer/utils/any_character_in_value_transformer"
 require "pry"
 
 module Regexer
@@ -165,12 +167,7 @@ module Regexer
     def has_any_character_in(*values)
       combined_pattern = values.reduce("") do |pattern, value|
         Regexer::Validators::AnyCharacterInValidator.value_valid?(value)
-        if value.instance_of?(Hash)
-          Regexer::Validators::FromToValidator.valid_values?("ascii_character", value[:from], value[:to])
-          pattern + "#{value[:from]}-#{value[:to]}"
-        else
-          pattern + Regexer::Utils::PatternSanitizer.sanitize(value)
-        end
+        pattern + Regexer::Utils::AnyCharacterInValueTransformer.transform(value)
       end
 
       pattern_object = Regexer::Models::Pattern.new("[#{combined_pattern}]")
@@ -188,7 +185,7 @@ module Regexer
     # VALUE BUILDER METHOD THAT IS COMPATIBILE WITH THE PATTERN BUILDER
     def character_range(from:, to:)
       Regexer::Validators::FromToValidator.valid_values?("ascii_character", from, to)
-      { from: Regexp.escape(from), to: Regexp.escape(to) }
+      Regexer::Models::CharacterRangePattern.new(from, to)
     end
 
     alias word_character has_word_character

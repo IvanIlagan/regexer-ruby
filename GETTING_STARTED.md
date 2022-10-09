@@ -174,9 +174,10 @@ Regexer::PatternBuilder.new do
 end
 ```
 
-The method accepts String, Integer and Hash data types as its argument. Do take note that when we give the method a hash, it only accepts that hash IF it contains the 'from' and 'to' keys in that specific order. If any other data types or a hash with any other key names are given, an exception is raised. It will also raise an exception if it fails the value validation also, which is quite similar with the value validation of the has_ascii_character method.
+The method accepts String, Integer, Float and Hash data types as its argument. Do take note that when we give the method a hash, it only accepts that hash IF it contains the 'from' and 'to' keys in that specific order. If any other data types or a hash with any other key names are given, an exception is raised. It will also raise an exception if it fails the value validation also, which is quite similar with the value validation of the has_ascii_character method.
 
-To lessen the burden of passing a manually made Hash and to add more readability, we can use the value builder method [character_range](#character-range) to build our Hash object.
+To lessen the burden of passing a manually made Hash and to add more readability, we can use the value builder method [character_range](#character-range) to create a CharacterRangePattern object. That object
+is has attributes named from & to and their values are always compatible with this method.
 
 The method is not restricted to accept 1 parameter. It can actually take as many parameter as you want as to maximize the usage of the square brackets.
 
@@ -471,9 +472,9 @@ This method returns a single entity Regexer::Models::Pattern object
 
 ## Value Builder Methods
 ### Character Range
-A method that builds a hash in the form: { from: value, to: value }
+A method that builds a CharacterRangePattern object with the attributes named from & to.
 
-This method will always return that specific hash structure that is already regex escaped.
+This method will always return that object and any value given to it, those values will always be regex escaped.
 
 Do take note that this method runs value validations which is similar with the has_ascii_character method. If it didn't pass the value validation, this will raise an exception.
 
