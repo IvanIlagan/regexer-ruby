@@ -16,6 +16,7 @@
     - [Whitespace Character](#whitespace-character)
     - [Digit Character](#digit-character)
     - [Non-digit Character](#non-digit-character)
+    - [Newline Character](#newline-character)
     - [Alphanumeric Character](#alphanumeric-character)
     - [Any Character Except Line Break](#any-character-except-line-break)
   - [Chainable Patterns](#chainable-patterns)
@@ -292,6 +293,19 @@ In regex, there is a special shorthand character that matches any character that
 Regexer::PatternBuilder.new do
   has_non_digit_character # builds "\\D"
   non_digit_character     # builds "\\D"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Newline Character
+In regex, there is a special shorthand character that matches a newline character and that is the \n or newline pattern. Regexer also offers that exact pattern via the has_newline_character or newline_character method.
+```ruby
+Regexer::PatternBuilder.new do
+  has_newline_character # builds "\\n"
+  newline_character     # builds "\\n"
 end
 ```
 

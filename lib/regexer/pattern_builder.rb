@@ -189,16 +189,18 @@ module Regexer
       pattern_object
     end
 
+    def has_newline_character
+      pattern_object = Regexer::Models::Pattern.new("\\n")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
     # VALUE BUILDER METHOD THAT IS COMPATIBILE WITH THE PATTERN BUILDER
     def character_range(from:, to:)
       Regexer::Validators::FromToValidator.valid_values?("ascii_character", from, to)
       Regexer::Models::CharacterRangePattern.new(from, to)
     end
 
-    alias word_character has_word_character
-    alias whitespace_character has_whitespace_character
-    alias digit_character has_digit_character
-    alias non_digit_character has_non_digit_character
     alias alphanumeric_character has_alphanumeric_character
     alias any_character_except_new_line has_any_character_except_new_line
     alias letter has_letter
@@ -210,5 +212,12 @@ module Regexer
     alias group has_group
     alias any_character_in has_any_character_in
     alias any_character_not_in has_any_character_not_in
+
+    # Shorthand character alias methods
+    alias word_character has_word_character
+    alias whitespace_character has_whitespace_character
+    alias digit_character has_digit_character
+    alias non_digit_character has_non_digit_character
+    alias newline_character has_newline_character
   end
 end
