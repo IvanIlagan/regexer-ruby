@@ -201,6 +201,12 @@ module Regexer
       pattern_object
     end
 
+    def has_non_word_character
+      pattern_object = Regexer::Models::Pattern.new("\\W")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
     # VALUE BUILDER METHOD THAT IS COMPATIBILE WITH THE PATTERN BUILDER
     def character_range(from:, to:)
       Regexer::Validators::FromToValidator.valid_values?("ascii_character", from, to)
@@ -221,6 +227,7 @@ module Regexer
 
     # Shorthand character alias methods
     alias word_character has_word_character
+    alias non_word_character has_non_word_character
     alias whitespace_character has_whitespace_character
     alias digit_character has_digit_character
     alias non_digit_character has_non_digit_character
