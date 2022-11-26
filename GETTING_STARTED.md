@@ -17,6 +17,7 @@
     - [Digit Character](#digit-character)
     - [Non-digit Character](#non-digit-character)
     - [Newline Character](#newline-character)
+    - [Tab Character](#tab-character)
     - [Alphanumeric Character](#alphanumeric-character)
     - [Any Character Except Line Break](#any-character-except-line-break)
   - [Chainable Patterns](#chainable-patterns)
@@ -306,6 +307,19 @@ In regex, there is a special shorthand character that matches a newline characte
 Regexer::PatternBuilder.new do
   has_newline_character # builds "\\n"
   newline_character     # builds "\\n"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Tab Character
+In regex, there is a special shorthand character that matches a tab character and that is the \t or tab pattern. Regexer also offers that exact pattern via the has_tab_character or tab_character method.
+```ruby
+Regexer::PatternBuilder.new do
+  has_tab_character # builds "\\t"
+  tab_character     # builds "\\t"
 end
 ```
 
