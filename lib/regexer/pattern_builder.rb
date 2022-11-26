@@ -195,6 +195,12 @@ module Regexer
       pattern_object
     end
 
+    def has_tab_character
+      pattern_object = Regexer::Models::Pattern.new("\\t")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
     # VALUE BUILDER METHOD THAT IS COMPATIBILE WITH THE PATTERN BUILDER
     def character_range(from:, to:)
       Regexer::Validators::FromToValidator.valid_values?("ascii_character", from, to)
@@ -219,5 +225,6 @@ module Regexer
     alias digit_character has_digit_character
     alias non_digit_character has_non_digit_character
     alias newline_character has_newline_character
+    alias tab_character has_tab_character
   end
 end
