@@ -15,6 +15,7 @@
     - [Word Character](#word-character)
     - [Whitespace Character](#whitespace-character)
     - [Digit Character](#digit-character)
+    - [Non-digit Character](#non-digit-character)
     - [Alphanumeric Character](#alphanumeric-character)
     - [Any Character Except Line Break](#any-character-except-line-break)
   - [Chainable Patterns](#chainable-patterns)
@@ -278,6 +279,19 @@ In regex, there is a special shorthand character that matches any number charact
 Regexer::PatternBuilder.new do
   has_digit_character # builds "\\d"
   digit_character     # builds "\\d"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Non Digit Character
+In regex, there is a special shorthand character that matches any character that is not a number from 0-9 and that is the \D or Non-digit pattern. Regexer also offers that exact pattern via the has_non_digit_character or non_digit_character method.
+```ruby
+Regexer::PatternBuilder.new do
+  has_non_digit_character # builds "\\D"
+  non_digit_character     # builds "\\D"
 end
 ```
 
