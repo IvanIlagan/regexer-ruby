@@ -15,6 +15,7 @@
     - [Word Character](#word-character)
     - [Non-word Character](#non-word-character)
     - [Whitespace Character](#whitespace-character)
+    - [Non-whitespace Character](#non-whitespace-character)
     - [Digit Character](#digit-character)
     - [Non-digit Character](#non-digit-character)
     - [Newline Character](#newline-character)
@@ -282,6 +283,19 @@ In regex, there is a special shorthand character that matches any whitespace cha
 Regexer::PatternBuilder.new do
   has_whitespace_character # builds "\\s"
   whitespace_character     # builds "\\s"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Non Whitespace Character
+In regex, there is a special shorthand character that matches any character that is not a whitespace and that is the \S or Non-whitespace pattern. Regexer also offers that exact pattern via the has_non_whitespace_character or non_whitespace_character method.
+```ruby
+Regexer::PatternBuilder.new do
+  has_non_whitespace_character # builds "\\S"
+  non_whitespace_character     # builds "\\S"
 end
 ```
 

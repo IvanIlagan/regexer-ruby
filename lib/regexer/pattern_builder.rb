@@ -171,6 +171,12 @@ module Regexer
       pattern_object
     end
 
+    def has_non_whitespace_character
+      pattern_object = Regexer::Models::Pattern.new("\\S")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
     def has_digit_character
       pattern_object = Regexer::Models::Pattern.new("\\d")
       @final_pattern += pattern_object.raw_pattern
@@ -229,6 +235,7 @@ module Regexer
     alias word_character has_word_character
     alias non_word_character has_non_word_character
     alias whitespace_character has_whitespace_character
+    alias non_whitespace_character has_non_whitespace_character
     alias digit_character has_digit_character
     alias non_digit_character has_non_digit_character
     alias newline_character has_newline_character
