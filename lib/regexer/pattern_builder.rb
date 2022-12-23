@@ -213,6 +213,34 @@ module Regexer
       pattern_object
     end
 
+    # NOTE: When non-word characters are specified near the word boundary shorthand,
+    # the regex matching failes since it only allows matching only when the characters
+    # near it are actual word characters.
+    #
+    # It would be good if we can add a validation about it so that users know and
+    # make them keep in mind that regex behaves that way
+
+    def contains_the_word_ending_with(value)
+      pattern = contains(value)&.raw_pattern
+      pattern_object = Regexer::Models::Pattern.new("#{pattern}\\b", single_entity: false)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
+      pattern_object
+    end
+
+    def contains_the_word_starting_with(value)
+      pattern = contains(value)&.raw_pattern
+      pattern_object = Regexer::Models::Pattern.new("\\b#{pattern}", single_entity: false)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
+      pattern_object
+    end
+
+    def contains_the_word(value)
+      pattern = contains(value)&.raw_pattern
+      pattern_object = Regexer::Models::Pattern.new("\\b#{pattern}\\b", single_entity: false)
+      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
+      pattern_object
+    end
+
     # VALUE BUILDER METHOD THAT IS COMPATIBILE WITH THE PATTERN BUILDER
     def character_range(from:, to:)
       Regexer::Validators::FromToValidator.valid_values?("ascii_character", from, to)
@@ -240,5 +268,10 @@ module Regexer
     alias non_digit_character has_non_digit_character
     alias newline_character has_newline_character
     alias tab_character has_tab_character
+    alias the_word contains_the_word
+    alias contains_the_word_with contains_the_word
+    alias the_word_with contains_the_word
+    alias the_word_starting_with contains_the_word_starting_with
+    alias the_word_ending_with contains_the_word_ending_with
   end
 end

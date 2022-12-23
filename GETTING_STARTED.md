@@ -30,6 +30,7 @@
     - [None or Consecutive Group of Characters](#none-or-consecutive-group-of-characters)
     - [None or One Instance of Character](#none-or-one-instance-of-character)
     - [Group of Characters or Patterns](#group-of-characters-or-patterns)
+    - [Word Bounded Group of Characters](#word-bounded-group-of-characters)
 - [Value Builder Methods](#value-builder-methods)
 
 ## Terminologies
@@ -539,6 +540,52 @@ we can build another set of pattern just within that certain context. Same error
 when invalid values are given to the methods called within that block
 
 This method returns a single entity Regexer::Models::Pattern object
+
+### Word Bounded Group of Characters
+In regex there is a shorthand character that sets a boundary to check for matching word. This shorthand is in the form of '\b'. Regexer offers this shorthand in multiple methods which are: **contains_the_word**,
+**contains_the_word_starting_with** and **contains_the_word_ending_with**. These are made into 3 separate methods so that it can be used flexibly and still retains english like sentences readability.
+
+
+#### contains_the_word
+This basically does is the same with the contains method but also wraps the value with '\b' characters. As the name suggests, this is used to match a word exactly as given.
+```ruby
+Regexer::PatternBuilder.new do
+  contains_the_word "hi"              # builds "\b(hi)\b"
+
+  # aliases
+  contains_the_word_with "hello"      # builds "\b(hello)\b"
+  the_word "everyone"                 # builds "\b(everyone)\b"
+  the_word_with "everybody"           # builds "\b(everybody)\b"
+end
+```
+
+#### contains_the_word_starting_with
+Same as with the other word bounded methods, this also uses the contains method but this time it only puts the '\b' character at the beginning of the value. You can use this when finding words starting with a character/set of characters.
+```ruby
+Regexer::PatternBuilder.new do
+  contains_the_word_starting_with "hi"              # builds "\b(hi)"
+
+  # aliases
+  the_word_starting_with "everybody"                # builds "\b(everybody)"
+end
+```
+
+#### contains_the_word_ending_with
+Same as with the other word bounded methods, this also uses the contains method but this time it only puts the '\b' character at the end of the value. You can use this when finding words ending with a character/set of characters.
+```ruby
+Regexer::PatternBuilder.new do
+  contains_the_word_ending_with "hi"              # builds "(hi)\b"
+
+  # aliases
+  the_word_ending_with "everybody"                # builds "(everybody)\b"
+end
+```
+
+As we can see, the methods have each their own set of aliases in order to build regex in a more fitting english sentence like structure.
+
+**NOTE:** Keep in mind that when using the above methods, the set of characters given to these should be a valid word character. If a non-word character is given, then regex will fail to match using the '\b' shorthand. Apparently that only works when a valid set of word characters are given. 
+
+This method returns a non-single entity Regexer::Models::Pattern object
 
 ## Value Builder Methods
 ### Character Range
