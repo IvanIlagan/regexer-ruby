@@ -3,12 +3,12 @@
 require "regexer"
 require "./spec/shared_examples/shared_examples_for_contains_test"
 
-RSpec.describe "Regexer::Pattern #contains_the_word_starting_with" do
+RSpec.describe "Regexer::Pattern #contains_a_word_starting_with" do
   let(:val) { nil }
 
   let(:pattern_block) do
     lambda do |value|
-      -> { contains_the_word_starting_with value }
+      -> { contains_a_word_starting_with value }
     end.call(val)
   end
 
@@ -16,7 +16,7 @@ RSpec.describe "Regexer::Pattern #contains_the_word_starting_with" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
-  # NOTE: Under the hood, contains_the_word_starting_with method actually uses the contains method
+  # NOTE: Under the hood, contains_a_word_starting_with method actually uses the contains method
   include_examples "contains method test examples", [
     {
       case: "when value is an exact integer: 26543",
@@ -43,7 +43,7 @@ RSpec.describe "Regexer::Pattern #contains_the_word_starting_with" do
 
   context "when the_word_starting_with alias method is used" do
     let!(:pattern_block) do
-      -> { the_word_starting_with "a" }
+      -> { a_word_starting_with "a" }
     end
 
     it "returns /\\ba/ regex pattern" do
@@ -65,7 +65,7 @@ RSpec.describe "Regexer::Pattern #contains_the_word_starting_with" do
   context "when non-single entity values are given" do
     context "when value is a non-single entity pattern object" do
       let(:pattern_block) do
-        -> { contains_the_word_starting_with consecutive_instances_of letter from: "A", to: "z" }
+        -> { contains_a_word_starting_with consecutive_instances_of letter from: "A", to: "z" }
       end
 
       it "wraps the pattern in parentheses" do

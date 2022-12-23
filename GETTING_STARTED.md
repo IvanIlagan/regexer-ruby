@@ -30,7 +30,10 @@
     - [None or Consecutive Group of Characters](#none-or-consecutive-group-of-characters)
     - [None or One Instance of Character](#none-or-one-instance-of-character)
     - [Group of Characters or Patterns](#group-of-characters-or-patterns)
-    - [Word Bounded Group of Characters](#word-bounded-group-of-characters)
+    - [Containing Words](#containing-words)
+      - [Contains The Word](#contains-the-word)
+      - [Contains a Word Starting With](#contains-a-word-starting-with)
+      - [Contains a Word Ending With](#contains-a-word-ending-with)
 - [Value Builder Methods](#value-builder-methods)
 
 ## Terminologies
@@ -541,12 +544,16 @@ when invalid values are given to the methods called within that block
 
 This method returns a single entity Regexer::Models::Pattern object
 
-### Word Bounded Group of Characters
-In regex there is a shorthand character that sets a boundary to check for matching word. This shorthand is in the form of '\b'. Regexer offers this shorthand in multiple methods which are: **contains_the_word**,
-**contains_the_word_starting_with** and **contains_the_word_ending_with**. These are made into 3 separate methods so that it can be used flexibly and still retains english like sentences readability.
+### Containing Words
+In regex there is a shorthand character that is zero-length and sets a boundary to be used as the starting point to check for matches in a word. This shorthand is in the form of '\b' which is called a word boundary. 
+
+The definition of a word boundary, in terms of positioning, is a place in between a word character and a non-word character or the start/end of a string. With the '\b' denoting the boundary, the following shows where the word boundary lies: "\bhi\b" or " \bhello\b" or "\bhey\b " or "\bmorning\b!". If we look at the examples again, the boundary positions is really similar to the places that we always look for when forming words.
+
+In the context of regexer, we use that common identifier in the usage of the word boundary shorthand. Hence regexer offers multiple methods which are conveniently named: **contains_the_word**, **contains_a_word_starting_with** and **contains_a_word_ending_with**. These are made into 3 separate methods so that it can be used flexibly and still structured into an english-like sentence.
 
 
-#### contains_the_word
+<h4 id="contains-the-word">contains_the_word</h4>
+
 This basically does is the same with the contains method but also wraps the value with '\b' characters. As the name suggests, this is used to match a word exactly as given.
 ```ruby
 Regexer::PatternBuilder.new do
@@ -559,31 +566,33 @@ Regexer::PatternBuilder.new do
 end
 ```
 
-#### contains_the_word_starting_with
+<h4 id="contains-a-word-starting-with">contains_a_word_starting_with</h4>
+
 Same as with the other word bounded methods, this also uses the contains method but this time it only puts the '\b' character at the beginning of the value. You can use this when finding words starting with a character/set of characters.
 ```ruby
 Regexer::PatternBuilder.new do
-  contains_the_word_starting_with "hi"              # builds "\b(hi)"
+  contains_a_word_starting_with "hi"              # builds "\b(hi)"
 
   # aliases
-  the_word_starting_with "everybody"                # builds "\b(everybody)"
+  a_word_starting_with "everybody"                # builds "\b(everybody)"
 end
 ```
 
-#### contains_the_word_ending_with
+<h4 id="contains-a-word-ending-with">contains_a_word_ending_with</h4>
+
 Same as with the other word bounded methods, this also uses the contains method but this time it only puts the '\b' character at the end of the value. You can use this when finding words ending with a character/set of characters.
 ```ruby
 Regexer::PatternBuilder.new do
-  contains_the_word_ending_with "hi"              # builds "(hi)\b"
+  contains_a_word_ending_with "hi"              # builds "(hi)\b"
 
   # aliases
-  the_word_ending_with "everybody"                # builds "(everybody)\b"
+  a_word_ending_with "everybody"                # builds "(everybody)\b"
 end
 ```
 
 As we can see, the methods have each their own set of aliases in order to build regex in a more fitting english sentence like structure.
 
-**NOTE:** Keep in mind that when using the above methods, the set of characters given to these should be a valid word character. If a non-word character is given, then regex will fail to match using the '\b' shorthand. Apparently that only works when a valid set of word characters are given. 
+**NOTE:** Keep in mind the definition of the word boundary when using the above methods. You may experience weird regex matches but in reality, it is supposed to work that way as specified in the definition. Example, if you put a non-word character before or after the '\b' character e.g. "hi!\b". You may think that it would match the 'hi!' in the string "hi! hello" but unfortunately not. Since '\b' is in between of 2 non-word characters which is '!' and a space. It is now an invalid usage of '\b' in regex as per definition. For that to match, the string should be "hi!hello" since it satisfies the definition in which '\b' is in between a word character (which is 'h') and a non-word character (which is '!').
 
 This method returns a non-single entity Regexer::Models::Pattern object
 
