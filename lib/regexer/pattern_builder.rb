@@ -162,6 +162,7 @@ module Regexer
 
       pattern_object = Regexer::Models::Pattern.new(String.new(pattern).insert(1, "^"), single_entity: true)
       Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, pattern, pattern_object.raw_pattern)
+      pattern_object
     end
 
     # Shorthand characters
