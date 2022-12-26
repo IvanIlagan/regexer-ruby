@@ -2,7 +2,6 @@
 
 require "regexer"
 require "./spec/shared_examples/shared_examples_for_shorthand_character_test"
-require "pry"
 
 RSpec.describe "Regexer::Pattern #has_carriage_return_character" do
   let(:pattern_block) do
@@ -36,7 +35,7 @@ RSpec.describe "Regexer::Pattern #has_carriage_return_character" do
     }
   ]
 
-  context "when tab_character alias method is used" do
+  context "when carriage_return_character alias method is used" do
     let!(:pattern_block) do
       -> { carriage_return_character }
     end
