@@ -41,9 +41,9 @@ RSpec.describe "Regexer::Pattern #contains_the_word" do
     }
   ]
 
-  context "when contains_the_word_with alias method is used" do
+  context "when contains_a_word_with alias method is used" do
     let!(:pattern_block) do
-      -> { contains_the_word_with "a" }
+      -> { contains_a_word_with "a" }
     end
 
     it "returns /\\ba\\b/ regex pattern" do
@@ -61,9 +61,9 @@ RSpec.describe "Regexer::Pattern #contains_the_word" do
     end
   end
 
-  context "when the_word_with alias method is used" do
+  context "when a_word_with alias method is used" do
     let!(:pattern_block) do
-      -> { the_word_with "a" }
+      -> { a_word_with "a" }
     end
 
     it "returns /\\ba\\b/ regex pattern" do
@@ -85,7 +85,7 @@ RSpec.describe "Regexer::Pattern #contains_the_word" do
   context "when non-single entity values are given" do
     context "when value is a non-single entity pattern object" do
       let(:pattern_block) do
-        -> { contains_the_word_with consecutive_instances_of letter from: "A", to: "z" }
+        -> { contains_a_word_with consecutive_instances_of letter from: "A", to: "z" }
       end
 
       it "wraps the pattern in parentheses" do

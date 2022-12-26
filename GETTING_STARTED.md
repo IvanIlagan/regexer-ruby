@@ -560,11 +560,13 @@ Regexer::PatternBuilder.new do
   contains_the_word "hi"              # builds "\b(hi)\b"
 
   # aliases
-  contains_the_word_with "hello"      # builds "\b(hello)\b"
-  the_word "everyone"                 # builds "\b(everyone)\b"
-  the_word_with "everybody"           # builds "\b(everybody)\b"
+  the_word "everyone"               # builds "\b(everyone)\b"
+  contains_a_word_with "hello"      # builds "\b(hello)\b"
+  a_word_with "everybody"           # builds "\b(everybody)\b"
 end
 ```
+
+This method contains a lot more aliases then other methods. This is because the scenarios that the '\b' placed around a value are a lot. Example is you can use it to find exact words and another is you can use it to find words that satisfies a condition like words with exactly 5 letters or words with no vowels. Given that, the aliases allows us to construct a more fitting and easily understood english sentence based on our use cases. The methods #contains_the_word and #the_word fits the scenario where you want to find specific words while the #contains_a_word_with and #a_word_with fits the scenario where you want to find a word based on a condition.
 
 <h4 id="contains-a-word-starting-with">contains_a_word_starting_with</h4>
 
@@ -590,9 +592,7 @@ Regexer::PatternBuilder.new do
 end
 ```
 
-As we can see, the methods have each their own set of aliases in order to build regex in a more fitting english sentence like structure.
-
-**NOTE:** Keep in mind the definition of the word boundary when using the above methods. You may experience weird regex matches but in reality, it is supposed to work that way as specified in the definition. Example, if you put a non-word character before or after the '\b' character e.g. "hi!\b". You may think that it would match the 'hi!' in the string "hi! hello" but unfortunately not. Since '\b' is in between of 2 non-word characters which is '!' and a space. It is now an invalid usage of '\b' in regex as per definition. For that to match, the string should be "hi!hello" since it satisfies the definition in which '\b' is in between a word character (which is 'h') and a non-word character (which is '!').
+**NOTE:** Keep in mind the definition of the word boundary when using the above methods. You may experience weird regex matches but in reality, it is supposed to work that way as specified in the definition. Example, if you put a non-word character before or after the '\b' character e.g. "hi!\b". You may think that it would match the 'hi!' in the string "hi! hello" but unfortunately not. Since '\b' is in between of 2 non-word characters which is '!' and a space. For that regex to match, the string should be "hi!hello" since it satisfies the definition in which '\b' is in between a word character (which is 'h') and a non-word character (which is '!').
 
 This method returns a non-single entity Regexer::Models::Pattern object
 
