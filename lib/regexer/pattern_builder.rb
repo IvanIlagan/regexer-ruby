@@ -262,8 +262,8 @@ module Regexer
     alias newline_character has_newline_character
     alias tab_character has_tab_character
     alias the_word contains_the_word
-    alias contains_the_word_with contains_the_word
-    alias the_word_with contains_the_word
+    alias contains_a_word_with contains_the_word
+    alias a_word_with contains_the_word
     alias a_word_starting_with contains_a_word_starting_with
     alias a_word_ending_with contains_a_word_ending_with
   end
