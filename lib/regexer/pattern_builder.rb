@@ -219,6 +219,12 @@ module Regexer
       pattern_object
     end
 
+    def has_form_feed_character
+      pattern_object = Regexer::Models::Pattern.new("\\f")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
     def has_non_word_character
       pattern_object = Regexer::Models::Pattern.new("\\W")
       @final_pattern += pattern_object.raw_pattern
@@ -275,6 +281,7 @@ module Regexer
     alias tab_character has_tab_character
     alias vertical_tab_character has_vertical_tab_character
     alias carriage_return_character has_carriage_return_character
+    alias form_feed_character has_form_feed_character
     alias the_word contains_the_word
     alias contains_a_word_with contains_the_word
     alias a_word_with contains_the_word

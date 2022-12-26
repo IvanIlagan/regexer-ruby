@@ -24,6 +24,7 @@
     - [Any Character Except Line Break](#any-character-except-line-break)
     - [Carriage Return Character](#carriage-return-character)
     - [Vertical Tab Character](#vertical-tab-character)
+    - [Form Feed Character](#form-feed-character)
   - [Chainable Patterns](#chainable-patterns)
     - [Contains Set of Characters](#contains-set-of-characters)
     - [Starts With a Group of Characters](#starts-with-a-group-of-characters)
@@ -406,6 +407,19 @@ In regex, there is a special shorthand character that matches a vertical tab cha
 Regexer::PatternBuilder.new do
   has_vertical_tab_character # builds "\\v"
   vertical_tab_character     # builds "\\v"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Form Feed Character
+In regex, there is a special shorthand character that matches a form feed character and that is the \f or form feed pattern. Regexer also offers that exact pattern via the has_form_feed_character or form_feed_character method.
+```ruby
+Regexer::PatternBuilder.new do
+  has_form_feed_character # builds "\\f"
+  form_feed_character     # builds "\\f"
 end
 ```
 
