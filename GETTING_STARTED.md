@@ -404,8 +404,8 @@ This method returns a single entity Regexer::Models::Pattern object
 In regex, there is a special shorthand character that matches a vertical tab character and that is the \v or vertical tab pattern. Regexer also offers that exact pattern via the has_vertical_tab_character or vertical_tab_character method.
 ```ruby
 Regexer::PatternBuilder.new do
-  has_vertical_tab_character # builds "\\r"
-  vertical_tab_character     # builds "\\r"
+  has_vertical_tab_character # builds "\\v"
+  vertical_tab_character     # builds "\\v"
 end
 ```
 
