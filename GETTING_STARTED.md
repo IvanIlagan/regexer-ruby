@@ -22,6 +22,7 @@
     - [Tab Character](#tab-character)
     - [Alphanumeric Character](#alphanumeric-character)
     - [Any Character Except Line Break](#any-character-except-line-break)
+    - [Carriage Return Character](#carriage-return-character)
   - [Chainable Patterns](#chainable-patterns)
     - [Contains Set of Characters](#contains-set-of-characters)
     - [Starts With a Group of Characters](#starts-with-a-group-of-characters)
@@ -384,6 +385,20 @@ end
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
 This method returns a single entity Regexer::Models::Pattern object
+
+### Carriage Return Character
+In regex, there is a special shorthand character that matches a carriage return character and that is the \r or carriage return pattern. Regexer also offers that exact pattern via the has_carriage_return_character or carriage_return_character method.
+```ruby
+Regexer::PatternBuilder.new do
+  has_carriage_return_character # builds "\\r"
+  carriage_return_character     # builds "\\r"
+end
+```
+
+The method does not accept any arguments. We can freely call it as is in the pattern builder.
+
+This method returns a single entity Regexer::Models::Pattern object
+
 ## Chainable patterns
 ### Contains Set of Characters
 This is a method in which it acts like directly adding the set of characters into the regex
