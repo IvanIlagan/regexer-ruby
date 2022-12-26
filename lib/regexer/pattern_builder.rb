@@ -207,6 +207,12 @@ module Regexer
       pattern_object
     end
 
+    def has_vertical_tab_character
+      pattern_object = Regexer::Models::Pattern.new("\\v")
+      @final_pattern += pattern_object.raw_pattern
+      pattern_object
+    end
+
     def has_carriage_return_character
       pattern_object = Regexer::Models::Pattern.new("\\r")
       @final_pattern += pattern_object.raw_pattern
@@ -267,6 +273,7 @@ module Regexer
     alias non_digit_character has_non_digit_character
     alias newline_character has_newline_character
     alias tab_character has_tab_character
+    alias vertical_tab_character has_vertical_tab_character
     alias carriage_return_character has_carriage_return_character
     alias the_word contains_the_word
     alias contains_a_word_with contains_the_word
