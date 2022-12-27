@@ -11,6 +11,7 @@
     - [ASCII Character In a Given Range](#ascii-character-in-a-given-range)
     - [Any Character In a Given Set of Characters](#any-character-in-a-given-set-of-characters)
     - [Any Character Not In a Given Set of Characters](#any-character-not-in-a-given-set-of-characters)
+    - [Group of Characters or Patterns](#group-of-characters-or-patterns)
     - [Or](#or)
     - [Word Character](#word-character)
     - [Non-word Character](#non-word-character)
@@ -32,7 +33,6 @@
     - [Consecutive Group of Characters](#consecutive-group-of-characters)
     - [None or Consecutive Group of Characters](#none-or-consecutive-group-of-characters)
     - [None or One Instance of Character](#none-or-one-instance-of-character)
-    - [Group of Characters or Patterns](#group-of-characters-or-patterns)
     - [Containing Words](#containing-words)
       - [Contains The Word](#contains-the-word)
       - [Contains a Word Starting With](#contains-a-word-starting-with)
@@ -47,7 +47,7 @@
 
 - Standalone Patterns
 
-    These are pattern methods that have no parameters or if given a parameter, they don't accept Regexer::Models::Pattern objects but accepts a strict set of values OR required set of keyword arguments. These methods can be used on their own OR as values for other methods to make a chain.
+    These are pattern methods that have no parameters or if given a parameter, they don't accept Regexer::Models::Pattern objects but accepts a strict set of values, required set of keyword arguments or just a block. These methods can be used on their own OR as values for other methods to make a chain.
 
 - Chainable Patterns
 
@@ -233,6 +233,24 @@ end
 ```
 
 The method functions the same as with the has_any_character_in method like they have the same argument data types, argument values and validations.
+
+This method returns a single entity Regexer::Models::Pattern object
+
+### Group of Characters or Patterns
+Just like in regex, regexer offers a method called has_group or group that allows us to generate a pattern for finding groups of characters or substrings via the parentheses in regex.
+```ruby
+Regexer::PatternBuilder.new do
+  has_group do
+    has_letter from: "A", to: "z"
+    contains "@"
+    ends_with consecutive_instances_of number from: 0, to: 9
+  end # builds "([A-z]@([0-9]+)$)"
+end
+```
+
+The method only accepts a block and that block acts similar to the PatternBuilder class in which
+we can build another set of pattern just within that certain context. Same errors will be raised
+when invalid values are given to the methods called within that block
 
 This method returns a single entity Regexer::Models::Pattern object
 
@@ -568,24 +586,6 @@ end
 ```
 
 It also functions the same as the contains method since it is being used by it behind the scenes to build the pattern and then the method itself just appends the '?' character at the end of it.
-
-### Group of Characters or Patterns
-Just like in regex, regexer offers a method called has_group or group that allows us to generate a pattern for finding groups of characters or substrings via the parentheses in regex.
-```ruby
-Regexer::PatternBuilder.new do
-  has_group do
-    has_letter from: "A", to: "z"
-    contains "@"
-    ends_with consecutive_instances_of number from: 0, to: 9
-  end # builds "([A-z]@([0-9]+)$)"
-end
-```
-
-The method only accepts a block and that block acts similar to the PatternBuilder class in which
-we can build another set of pattern just within that certain context. Same errors will be raised
-when invalid values are given to the methods called within that block
-
-This method returns a single entity Regexer::Models::Pattern object
 
 ### Containing Words
 In regex there is a shorthand character that is zero-length and sets a boundary to be used as the starting point to check for matches in a word. This shorthand is in the form of '\b' which is called a word boundary. 

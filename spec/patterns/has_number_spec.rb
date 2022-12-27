@@ -17,6 +17,15 @@ RSpec.describe "Regexer::Pattern #has_number" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    let!(:value1) { 0 }
+    let!(:value2) { 9 }
+
+    it "returns a Regexer::Models::Pattern object" do
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:has_number, from: 0, to: 9)).to be_a Regexer::Models::Pattern
+    end
+  end
+
   include_examples "has_number method test example", from_value: 0, to_value: 9, expected_value: /[0-9]/
   include_examples "has_number method invalid From-To Value Range Error", from_value: 9, to_value: 0
   include_examples "has_number method invalid From-To Value Error", from_value: -2, to_value: 92

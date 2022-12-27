@@ -14,6 +14,16 @@ RSpec.describe "Regexer::Pattern #has_consecutive_instances_of" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    let!(:pattern_block) do
+      -> { has_consecutive_instances_of "test" }
+    end
+
+    it "returns a Regexer::Models::Pattern object" do
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:has_consecutive_instances_of, "test")).to be_a Regexer::Models::Pattern
+    end
+  end
+
   context "when consecutive_instances_of alias method is used" do
     let!(:pattern_block) do
       -> { consecutive_instances_of "test" }
@@ -87,6 +97,10 @@ RSpec.describe "Regexer::Pattern #has_consecutive_instances_of" do
       end
 
       it "returns /[0-9]+/ regex pattern" do
+        expect(pattern).to eq(/[0-9]+/)
+      end
+
+      it "successfully replaced the first generated pattern in the chain" do
         expect(pattern).to eq(/[0-9]+/)
       end
     end

@@ -18,6 +18,15 @@ RSpec.describe "Regexer::Pattern #has_ascii_character" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    let!(:value1) { "a" }
+    let!(:value2) { "z" }
+
+    it "returns a Regexer::Models::Pattern object" do
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:has_ascii_character, from: "a", to: "z")).to be_a Regexer::Models::Pattern
+    end
+  end
+
   include_examples "has_ascii_character method test example", from_value: "A", to_value: "z", expected_value: /[A-z]/
   include_examples "has_ascii_character method test example", from_value: "<", to_value: "}", expected_value: /[<-\}]/
   include_examples "has_ascii_character method invalid From-To Value Range Error", from_value: "a", to_value: "Z"

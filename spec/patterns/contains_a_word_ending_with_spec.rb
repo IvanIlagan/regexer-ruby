@@ -16,6 +16,14 @@ RSpec.describe "Regexer::Pattern #contains_a_word_ending_with" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    let!(:val) { "test" }
+
+    it "returns a Regexer::Models::Pattern object" do
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:contains_a_word_ending_with, "test")).to be_a Regexer::Models::Pattern
+    end
+  end
+
   # NOTE: Under the hood, contains_a_word_ending_with method actually uses the contains method
   include_examples "contains method test examples", [
     {
@@ -71,6 +79,16 @@ RSpec.describe "Regexer::Pattern #contains_a_word_ending_with" do
       it "wraps the pattern in parentheses" do
         expect(pattern).to eq(/([A-z]+)\b/)
       end
+    end
+  end
+
+  context "when method is used to chain another method" do
+    let(:pattern_block) do
+      -> { contains_a_word_ending_with word_character }
+    end
+
+    it "successfully replaced the first generated pattern in the chain" do
+      expect(pattern).to eq(/\w\b/)
     end
   end
 

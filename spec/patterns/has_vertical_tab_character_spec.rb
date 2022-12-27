@@ -12,6 +12,12 @@ RSpec.describe "Regexer::Pattern #has_vertical_tab_character" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    it "returns a Regexer::Models::Pattern object" do
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:has_vertical_tab_character)).to be_a Regexer::Models::Pattern
+    end
+  end
+
   include_examples "shorthand character method test examples", "\\v", [
     {
       case: "when has_vertical_tab_character is used",

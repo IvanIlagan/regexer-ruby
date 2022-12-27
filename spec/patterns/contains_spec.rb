@@ -16,6 +16,14 @@ RSpec.describe "Regexer::Pattern #contains" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    let!(:val) { "test" }
+
+    it "returns a Regexer::Models::Pattern object" do
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:contains, "test")).to be_a Regexer::Models::Pattern
+    end
+  end
+
   include_examples "contains method test examples", [
     {
       case: "when value is an exact integer: 26543",
@@ -91,6 +99,16 @@ RSpec.describe "Regexer::Pattern #contains" do
       it "wraps the pattern in parentheses" do
         expect(pattern).to eq(/([A-z]+)/)
       end
+    end
+  end
+
+  context "when method is used to chain another method" do
+    let(:pattern_block) do
+      -> { contains word_character }
+    end
+
+    it "successfully replaced the first generated pattern in the chain" do
+      expect(pattern).to eq(/\w/)
     end
   end
 
