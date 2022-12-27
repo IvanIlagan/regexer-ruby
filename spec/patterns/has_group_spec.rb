@@ -17,6 +17,13 @@ RSpec.describe "Regexer::Pattern #has_group" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    it "returns a Regexer::Models::Pattern object" do
+      test_block = -> { contains "1" }
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:has_group, &test_block)).to be_a Regexer::Models::Pattern
+    end
+  end
+
   context "when block is given" do
     it "builds regex pattern specified within a block and closes those in parenthesis" do
       expect(pattern).to eq(/(\w+@[0-9])/)

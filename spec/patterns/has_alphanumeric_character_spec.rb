@@ -11,6 +11,12 @@ RSpec.describe "Regexer::Pattern #has_alphanumeric_character" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    it "returns a Regexer::Models::Pattern object" do
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:has_alphanumeric_character)).to be_a Regexer::Models::Pattern
+    end
+  end
+
   context "when string being matched is 'h'" do
     it "is a match" do
       expect("h".match?(pattern)).to eq true

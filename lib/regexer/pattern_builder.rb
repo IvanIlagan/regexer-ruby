@@ -142,7 +142,7 @@ module Regexer
       value = Regexer::PatternBuilder.new(&block).result
       sanitized_pattern = Regexer::Utils::PatternSanitizer.sanitize(value)
       pattern_object = Regexer::Models::Pattern.new("(#{sanitized_pattern})")
-      Regexer::Utils::StringHelper.update_string_pattern(@final_pattern, sanitized_pattern, pattern_object.raw_pattern)
+      @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 

@@ -12,6 +12,12 @@ RSpec.describe "Regexer::Pattern #has_form_feed_character" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    it "returns a Regexer::Models::Pattern object" do
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:has_form_feed_character)).to be_a Regexer::Models::Pattern
+    end
+  end
+
   include_examples "shorthand character method test examples", "\\f", [
     {
       case: "when has_form_feed_character is used",

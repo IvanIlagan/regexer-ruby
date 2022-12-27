@@ -17,6 +17,14 @@ RSpec.describe "Regexer::Pattern #has_any_character_not_in" do
     Regexer::PatternBuilder.new(&pattern_block).result.regex
   end
 
+  context "when method is called" do
+    let!(:val) { "test" }
+
+    it "returns a Regexer::Models::Pattern object" do
+      expect(Regexer::PatternBuilder.new(&pattern_block).send(:has_any_character_not_in, "test")).to be_a Regexer::Models::Pattern
+    end
+  end
+
   context "when any_character_not_in alias method is used" do
     let!(:val) { 3.56 }
     let!(:pattern_block) do
