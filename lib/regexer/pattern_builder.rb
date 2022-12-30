@@ -23,6 +23,10 @@ module Regexer
       Regexer::Models::Pattern.new(@final_pattern, single_entity: false)
     end
 
+    def append_pattern(&block)
+      instance_exec(&block)
+    end
+
     private
 
     # STRUCTS

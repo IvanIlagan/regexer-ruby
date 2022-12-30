@@ -4,6 +4,7 @@
   - [Layout](#layout)
   - [Adding Patterns](#adding-patterns)
   - [Using The Final Pattern](#using-the-final-pattern)
+  - [Appending Patterns](#appending-patterns)
 - [Patterns](#patterns)
   - [Standalone Patterns](#standalone-patterns)
     - [Letter In a Given Range](#letter-in-a-given-range)
@@ -125,6 +126,25 @@ puts "Hello".match?(pattern_builder_result.regex)
 ```
 
 Take note that the PatternBuilder#result returns a non-single entity Regexer::Models::Pattern object
+
+## Appending Patterns
+You can append more patterns to the PatternBuilder object using the #append_pattern method. Just like how you initially build your patterns, this method only needs to be given a block.
+
+```ruby
+pattern_builder = Regexer::PatternBuilder.new do
+  starts_with "Hello"
+end
+
+puts pattern_builder.result.raw_pattern
+# outputs "^(Hello)"
+
+pattern_builder.append_pattern do
+  contains ", world!"
+end
+
+puts pattern_builder.result.raw_pattern
+# outputs "^(Hello)(,\ world!)"
+```
 
 ## Patterns
 ## Standalone Patterns
