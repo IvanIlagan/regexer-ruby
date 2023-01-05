@@ -2,9 +2,10 @@
 - [Terminologies](#terminologies)
 - [Building patterns](#building-patterns)
   - [Layout](#layout)
-  - [Adding Patterns](#adding-patterns)
+  - [Writing Patterns](#writing-patterns)
   - [Using The Final Pattern](#using-the-final-pattern)
   - [Appending Patterns](#appending-patterns)
+  - [Adding Two Patterns Together](#adding-two-patterns-together)
 - [Patterns](#patterns)
   - [Standalone Patterns](#standalone-patterns)
     - [Letter In a Given Range](#letter-in-a-given-range)
@@ -75,10 +76,10 @@ Regexer::PatternBuilder.new do
 end
 ```
 
-## Adding Patterns
-To start adding your patterns, just call the available [pattern methods](#patterns) and supply them values based on your needs.
+## Writing Patterns
+To start writing your patterns, just call the available [pattern methods](#patterns) and supply them values based on your needs.
 
-Highly recommend to add your patterns line by line. This is because the pattern builder builds the pattern from left to right.
+Highly recommend to write your patterns line by line. This is because the pattern builder builds the pattern from left to right.
 
 ```ruby
 Regexer::PatternBuilder.new do
@@ -144,6 +145,22 @@ end
 
 puts pattern_builder.result.raw_pattern
 # outputs "^(Hello)(,\ world!)"
+```
+
+## Adding Two Patterns Together
+You can add two very different patterns together much like a string using the '+' operator. Just like the '+' operator in a string, it returns a new pattern object which value is the result of the addition of the two involved patterns in the operation. The value of the original pattern is not touched so we don't have to worry about value mutation when using the operator.
+
+```ruby
+pattern_builder1 = Regexer::PatternBuilder.new do
+  starts_with "Hello"
+end
+
+pattern_builder2 = Regexer::PatternBuilder.new do
+  contains ", world!"
+end
+
+puts pattern_builder1.result + pattern_builder2.result
+# outputs Regexer::Models::Pattern object with a value of: "^(Hello)(,\ world!)"
 ```
 
 ## Patterns
