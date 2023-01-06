@@ -144,7 +144,7 @@ pattern_builder.append_pattern do
 end
 
 puts pattern_builder.result.raw_pattern
-# outputs "^(Hello)(,\ world!)"
+# outputs "^(Hello)(,\\ world!)"
 ```
 
 ## Adding Two Patterns Together
@@ -160,7 +160,7 @@ pattern_builder2 = Regexer::PatternBuilder.new do
 end
 
 puts pattern_builder1.result + pattern_builder2.result
-# outputs Regexer::Models::Pattern object with a value of: "^(Hello)(,\ world!)"
+# outputs Regexer::Models::Pattern object with a value of: "^(Hello)(,\\ world!)"
 ```
 
 ## Patterns
@@ -637,12 +637,12 @@ In the context of regexer, we use that common identifier in the usage of the wor
 This basically does is the same with the contains method but also wraps the value with '\b' characters. As the name suggests, this is used to match a word exactly as given.
 ```ruby
 Regexer::PatternBuilder.new do
-  contains_the_word "hi"              # builds "\b(hi)\b"
+  contains_the_word "hi"              # builds "\\b(hi)\\b"
 
   # aliases
-  the_word "everyone"               # builds "\b(everyone)\b"
-  contains_a_word_with "hello"      # builds "\b(hello)\b"
-  a_word_with "everybody"           # builds "\b(everybody)\b"
+  the_word "everyone"               # builds "\\b(everyone)\\b"
+  contains_a_word_with "hello"      # builds "\\b(hello)\\b"
+  a_word_with "everybody"           # builds "\\b(everybody)\\b"
 end
 ```
 
@@ -653,10 +653,10 @@ This method contains a lot more aliases then other methods. This is because the 
 Same as with the other word bounded methods, this also uses the contains method but this time it only puts the '\b' character at the beginning of the value. You can use this when finding words starting with a character/set of characters.
 ```ruby
 Regexer::PatternBuilder.new do
-  contains_a_word_starting_with "hi"              # builds "\b(hi)"
+  contains_a_word_starting_with "hi"              # builds "\\b(hi)"
 
   # aliases
-  a_word_starting_with "everybody"                # builds "\b(everybody)"
+  a_word_starting_with "everybody"                # builds "\\b(everybody)"
 end
 ```
 
@@ -665,10 +665,10 @@ end
 Same as with the other word bounded methods, this also uses the contains method but this time it only puts the '\b' character at the end of the value. You can use this when finding words ending with a character/set of characters.
 ```ruby
 Regexer::PatternBuilder.new do
-  contains_a_word_ending_with "hi"              # builds "(hi)\b"
+  contains_a_word_ending_with "hi"              # builds "(hi)\\b"
 
   # aliases
-  a_word_ending_with "everybody"                # builds "(everybody)\b"
+  a_word_ending_with "everybody"                # builds "(everybody)\\b"
 end
 ```
 

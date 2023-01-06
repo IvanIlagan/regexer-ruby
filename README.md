@@ -46,8 +46,8 @@ puts pattern.regex
 
 See [GETTING_STARTED](./GETTING_STARTED.md) for indepth details on usage and the documentation for the available DSL methods.
 
-## Basic Examples
-Starts with repeating word "dog"
+## Examples
+Starts With Repeating Word "dog"
 ```ruby
 require 'regexer'
 
@@ -59,6 +59,20 @@ pattern = pattern_builder.result
 
 puts pattern.regex
 # outputs /^((dog)+)/
+```
+
+Any Word With Only Three Letters In It
+```ruby
+require 'regexer'
+
+pattern_builder = Regexer::PatternBuilder.new do
+  contains_a_word_with consecutive_instances_of word_character, exactly: 3
+end
+
+pattern = pattern_builder.result
+
+puts pattern.regex
+# outputs /\b(\w{3})\b/
 ```
 
 Basic Email Address
@@ -79,7 +93,7 @@ puts pattern.regex
 # outputs /\w+@\w+\.[a-z]+/
 ```
 
-Ends with consecutive group of patterns
+Ends With Consecutive Group of Patterns
 ```ruby
 require 'regexer'
 
@@ -162,6 +176,41 @@ pattern = pattern_builder.result
 
 puts pattern.regex
 # outputs /(09)\d{2}\ \d{3}\ \d{4}/
+```
+
+Hex Color Codes
+```ruby
+require 'regexer'
+
+pattern_builder = Regexer::PatternBuilder.new do
+  starts_with none_or_one_instance_of "#"
+  ends_with group {
+    has_consecutive_instances_of(
+      any_character_in(
+        character_range(from: "a", to: "f"),
+        character_range(from: "A", to: "F"),
+        character_range(from: "0", to: "9")
+      ),
+      exactly: 6
+    )
+
+    _or_
+
+    has_consecutive_instances_of(
+      any_character_in(
+        character_range(from: "a", to: "f"),
+        character_range(from: "A", to: "F"),
+        character_range(from: "0", to: "9")
+      ),
+      exactly: 3
+    )
+  }
+end
+
+pattern = pattern_builder.result
+
+puts pattern.regex
+# outputs /^(\#?)([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/
 ```
 ## Development
 
