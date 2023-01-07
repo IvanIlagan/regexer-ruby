@@ -61,6 +61,12 @@ RSpec.describe Regexer::Models::Pattern do
         end
       end
 
+      context "#regex_shorthand_character?" do
+        it "returns a boolean representing if a pattern is tagged as regex_shorthand_character or not" do
+          expect(described_class.new("test", regex_shorthand_character: true).regex_shorthand_character?).to eq true
+        end
+      end
+
       context "#regex" do
         it "returns the regex equivalent of the pattern" do
           expect(described_class.new("test").regex).to eq(/test/)
