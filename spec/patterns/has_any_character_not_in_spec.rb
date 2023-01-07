@@ -130,6 +130,33 @@ RSpec.describe "Regexer::Pattern #has_any_character_not_in" do
         expect(pattern).to eq(/[^a\-z]/)
       end
     end
+
+    context "when value is a Pattern object" do
+      context "when Pattern object is NOT a regex shorthand character" do
+        let!(:pattern_block) do
+          lambda do
+            has_any_character_not_in starts_with word_character
+          end
+        end
+
+        it "raises InvalidValueError error" do
+          expect { pattern }.to raise_error(Regexer::Exceptions::InvalidValueError)
+            .with_message("Value should be one of type String, Integer, Float, Regexer::Models::CharacterRangePattern, Hash with from & to keys, Regexer::Models::Pattern as regex shorthand character")
+        end
+      end
+
+      context "when Pattern object is a regex shorthand character" do
+        let!(:pattern_block) do
+          lambda do
+            has_any_character_not_in word_character, whitespace_character
+          end
+        end
+
+        it "successfully removes the first generated patterns based on the pattern method values given" do
+          expect(pattern).to eq(/[^\w\s]/)
+        end
+      end
+    end
   end
 
   context "when multiple valid values are given" do
@@ -146,12 +173,12 @@ RSpec.describe "Regexer::Pattern #has_any_character_not_in" do
     end
   end
 
-  context "when value is NOT a string or an integer or float or a CharacterRangePattern object or a hash with from & to keys" do
+  context "when value is NOT a string or an integer or float or a CharacterRangePattern object or a hash with from & to keys or a Pattern object as regex shorthand character" do
     let!(:val) { /test/ }
 
     it "raises InvalidValueError error" do
       expect { pattern }.to raise_error(Regexer::Exceptions::InvalidValueError)
-        .with_message("Value should only be of type String or Integer or Float or Regexer::Models::CharacterRangePattern or Hash with from & to keys")
+        .with_message("Value should be one of type String, Integer, Float, Regexer::Models::CharacterRangePattern, Hash with from & to keys, Regexer::Models::Pattern as regex shorthand character")
     end
   end
 
@@ -161,7 +188,7 @@ RSpec.describe "Regexer::Pattern #has_any_character_not_in" do
 
       it "raises InvalidValueError error" do
         expect { pattern }.to raise_error(Regexer::Exceptions::InvalidValueError)
-          .with_message("Value should only be of type String or Integer or Float or Regexer::Models::CharacterRangePattern or Hash with from & to keys")
+          .with_message("Value should be one of type String, Integer, Float, Regexer::Models::CharacterRangePattern, Hash with from & to keys, Regexer::Models::Pattern as regex shorthand character")
       end
     end
 
@@ -170,7 +197,7 @@ RSpec.describe "Regexer::Pattern #has_any_character_not_in" do
 
       it "raises InvalidValueError error" do
         expect { pattern }.to raise_error(Regexer::Exceptions::InvalidValueError)
-          .with_message("Value should only be of type String or Integer or Float or Regexer::Models::CharacterRangePattern or Hash with from & to keys")
+          .with_message("Value should be one of type String, Integer, Float, Regexer::Models::CharacterRangePattern, Hash with from & to keys, Regexer::Models::Pattern as regex shorthand character")
       end
     end
   end

@@ -2,16 +2,18 @@
 
 require "regexer/exceptions/invalid_value_error"
 require "regexer/models/character_range_pattern"
+require "regexer/models/pattern"
 
 module Regexer
   module Validators
     # A Validator Class for validating values being passed to has_any_character_in Regexer::Pattern method
     class AnyCharacterInValidator
       def self.value_valid?(value)
-        char_range_model = "Regexer::Models::CharacterRangePattern"
-        valid_hash_model = "Hash with from & to keys"
-        valid_basic_types = "String or Integer or Float"
-        message = "Value should only be of type #{valid_basic_types} or #{char_range_model} or #{valid_hash_model}"
+        char_range = "Regexer::Models::CharacterRangePattern"
+        regex_shorthand_pattern = "Regexer::Models::Pattern as regex shorthand character"
+        hash_model = "Hash with from & to keys"
+        basic_types = "String, Integer, Float"
+        message = "Value should be one of type #{basic_types}, #{char_range}, #{hash_model}, #{regex_shorthand_pattern}"
         raise Regexer::Exceptions::InvalidValueError, message unless valid?(value)
       end
 
@@ -34,8 +36,16 @@ module Regexer
           value.instance_of?(Regexer::Models::CharacterRangePattern)
         end
 
+        def regex_shorthand_character_pattern?(value)
+          value.instance_of?(Regexer::Models::Pattern) && value.regex_shorthand_character?
+        end
+
         def valid?(value)
-          number?(value) || string?(value) || character_range?(value) || from_to_hash?(value)
+          number?(value) ||
+            string?(value) ||
+            character_range?(value) ||
+            from_to_hash?(value) ||
+            regex_shorthand_character_pattern?(value)
         end
       end
     end

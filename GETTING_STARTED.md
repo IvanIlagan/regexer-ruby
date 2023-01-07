@@ -244,6 +244,15 @@ Regexer::PatternBuilder.new do
 end
 ```
 
+Additionally this method also accepts Regexer::Models::Pattern objects but specifically the ones that are tagged as regex shorthand characters. Example of these values are values returned by the methods: word_character, whitespace_character etc...
+```ruby
+Regexer::PatternBuilder.new do
+  has_any_character_in "#",
+                       word_character,
+                       whitespace_character                     # builds [\\#\\w\\s]
+end
+```
+
 This method returns a single entity Regexer::Models::Pattern object
 
 ### Any Character Not In a Given Set of Characters
@@ -266,6 +275,13 @@ Regexer::PatternBuilder.new do
   has_any_character_not_in "dog",
                            character_range(from: "!", to: "/"),
                            12_345                                   # builds [^dog!-/12345]
+end
+
+# Pattern object params usage
+Regexer::PatternBuilder.new do
+  has_any_character_not_in "#",
+                       word_character,
+                       whitespace_character                     # builds [^\\#\\w\\s]
 end
 ```
 
@@ -324,7 +340,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Non-word Character
 In regex, there is a special shorthand character that matches any character other than alphanumeric character and underscore and that is the \W or Non-word pattern. Regexer also offers that exact pattern via the has_non_word_character or non_word_character method. This method is equivalent to [^A-Za-z0-9_] regex pattern
@@ -337,7 +353,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Whitespace Character
 In regex, there is a special shorthand character that matches any whitespace characters like spaces, newline, tab etc.... and that is the \s or Whitespace pattern. Regexer also offers that exact pattern via the has_whitespace_character or whitespace_character method.
@@ -350,7 +366,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Non Whitespace Character
 In regex, there is a special shorthand character that matches any character that is not a whitespace and that is the \S or Non-whitespace pattern. Regexer also offers that exact pattern via the has_non_whitespace_character or non_whitespace_character method.
@@ -363,7 +379,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Digit Character
 In regex, there is a special shorthand character that matches any number character from 0 to 9 and that is the \d or Digit pattern. Regexer also offers that exact pattern via the has_digit_character or digit_character method.
@@ -376,7 +392,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Non Digit Character
 In regex, there is a special shorthand character that matches any character that is not a number from 0-9 and that is the \D or Non-digit pattern. Regexer also offers that exact pattern via the has_non_digit_character or non_digit_character method.
@@ -389,7 +405,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Newline Character
 In regex, there is a special shorthand character that matches a newline character and that is the \n or newline pattern. Regexer also offers that exact pattern via the has_newline_character or newline_character method.
@@ -402,7 +418,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Tab Character
 In regex, there is a special shorthand character that matches a tab character and that is the \t or tab pattern. Regexer also offers that exact pattern via the has_tab_character or tab_character method.
@@ -415,7 +431,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Alphanumeric Character
 This is a method in which it builds the respective regex pattern for you in matching a text containing any alphanumeric pattern.
@@ -454,7 +470,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Vertical Tab Character
 In regex, there is a special shorthand character that matches a vertical tab character and that is the \v or vertical tab pattern. Regexer also offers that exact pattern via the has_vertical_tab_character or vertical_tab_character method.
@@ -467,7 +483,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ### Form Feed Character
 In regex, there is a special shorthand character that matches a form feed character and that is the \f or form feed pattern. Regexer also offers that exact pattern via the has_form_feed_character or form_feed_character method.
@@ -480,7 +496,7 @@ end
 
 The method does not accept any arguments. We can freely call it as is in the pattern builder.
 
-This method returns a single entity Regexer::Models::Pattern object
+This method returns a single entity Regexer::Models::Pattern object tagged as regex shorthand character
 
 ## Chainable patterns
 ### Contains Set of Characters

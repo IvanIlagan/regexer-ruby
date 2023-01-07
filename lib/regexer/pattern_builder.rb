@@ -151,9 +151,17 @@ module Regexer
     end
 
     def has_any_character_in(*values)
+      all_pattern_model_values = ""
       combined_pattern = values.reduce("") do |pattern, value|
         Regexer::Validators::AnyCharacterInValidator.value_valid?(value)
+
+        all_pattern_model_values << value.raw_pattern if value.instance_of?(::Regexer::Models::Pattern)
+
         pattern + Regexer::Utils::AnyCharacterInValueTransformer.transform(value)
+      end
+
+      unless all_pattern_model_values.empty?
+        ::Regexer::Utils::StringHelper.remove_pattern_in_the_end_of_string(@final_pattern, all_pattern_model_values)
       end
 
       pattern_object = Regexer::Models::Pattern.new("[#{combined_pattern}]")
@@ -171,67 +179,67 @@ module Regexer
 
     # Shorthand characters
     def has_whitespace_character
-      pattern_object = Regexer::Models::Pattern.new("\\s")
+      pattern_object = Regexer::Models::Pattern.new("\\s", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_non_whitespace_character
-      pattern_object = Regexer::Models::Pattern.new("\\S")
+      pattern_object = Regexer::Models::Pattern.new("\\S", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_digit_character
-      pattern_object = Regexer::Models::Pattern.new("\\d")
+      pattern_object = Regexer::Models::Pattern.new("\\d", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_word_character
-      pattern_object = Regexer::Models::Pattern.new("\\w")
+      pattern_object = Regexer::Models::Pattern.new("\\w", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_non_digit_character
-      pattern_object = Regexer::Models::Pattern.new("\\D")
+      pattern_object = Regexer::Models::Pattern.new("\\D", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_newline_character
-      pattern_object = Regexer::Models::Pattern.new("\\n")
+      pattern_object = Regexer::Models::Pattern.new("\\n", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_tab_character
-      pattern_object = Regexer::Models::Pattern.new("\\t")
+      pattern_object = Regexer::Models::Pattern.new("\\t", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_vertical_tab_character
-      pattern_object = Regexer::Models::Pattern.new("\\v")
+      pattern_object = Regexer::Models::Pattern.new("\\v", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_carriage_return_character
-      pattern_object = Regexer::Models::Pattern.new("\\r")
+      pattern_object = Regexer::Models::Pattern.new("\\r", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_form_feed_character
-      pattern_object = Regexer::Models::Pattern.new("\\f")
+      pattern_object = Regexer::Models::Pattern.new("\\f", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
 
     def has_non_word_character
-      pattern_object = Regexer::Models::Pattern.new("\\W")
+      pattern_object = Regexer::Models::Pattern.new("\\W", regex_shorthand_character: true)
       @final_pattern += pattern_object.raw_pattern
       pattern_object
     end
