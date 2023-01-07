@@ -1,3 +1,14 @@
+## [1.2.0] (January 07, 2023)
+## Changes
+* Added: new pattern methods based on the ff regex shorthand characters: \D, \n, \t, \W, \S, \b, \r, \v, \f.
+* Added: Regexer::PatternBuilder new instance method ```append_pattern``` which allows to append patterns to the Regexer:PatternBuilder instance.
+* Added: add operation to Regexer::Models::Pattern object. This allows to add two different results of pattern builders together to form a singular pattern.
+* Added: ```any_character_in``` and ```any_character_not_in``` methods now accepts pattern methods as value inputs. But the values should be a Pattern object tagged as regex shorthand character.
+* Fixed: ```has_any_character_not_in``` method, when chaining other pattern methods, does not generate a pattern including a duplicate copy of the chained pattern method result.
+* Fixed: ```Regexer::PatternBuilder.new {}.result``` always return a Regexer::Models::Pattern object with a new instance of the pattern value.
+
+**Full Changelog**: https://github.com/IvanIlagan/regexer-ruby/commits/v1.2.0
+
 ## [1.1.0] (October 09, 2022)
 ## Changes
 * Added a new pattern method called has_any_character_not_in. Basically this is the inverse of the has_any_character_in method in which this creates a regex pattern in the format: [^<characters_specified>]
