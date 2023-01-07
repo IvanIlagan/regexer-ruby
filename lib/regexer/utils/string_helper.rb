@@ -10,6 +10,11 @@ module Regexer
           pattern_to_update << new_pattern
         end
       end
+
+      def self.remove_pattern_in_the_end_of_string(pattern_to_update, pattern_to_remove)
+        pattern_to_update
+          .sub!(/(#{Regexp.escape(pattern_to_remove)})$/) { "" } if pattern_to_update.end_with?(pattern_to_remove)
+      end
     end
   end
 end

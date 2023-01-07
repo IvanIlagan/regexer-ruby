@@ -8,10 +8,11 @@ module Regexer
     class Pattern
       attr_reader :raw_pattern
 
-      def initialize(pattern, regex_escaped: true, single_entity: true)
+      def initialize(pattern, regex_escaped: true, single_entity: true, regex_shorthand_character: false)
         @raw_pattern = String.new(pattern)
         @regex_escaped = regex_escaped
         @single_entity = single_entity
+        @regex_shorthand_character = regex_shorthand_character
       end
 
       def +(other)
@@ -34,6 +35,10 @@ module Regexer
 
       def regex
         /#{raw_pattern}/
+      end
+
+      def regex_shorthand_character?
+        @regex_shorthand_character
       end
     end
   end

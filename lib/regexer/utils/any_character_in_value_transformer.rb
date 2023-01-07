@@ -4,6 +4,7 @@ require "regexer/utils/handlers/any_character_in_input_value_handlers/base"
 require "regexer/utils/handlers/any_character_in_input_value_handlers/basic_types_handler"
 require "regexer/utils/handlers/any_character_in_input_value_handlers/character_range_pattern_handler"
 require "regexer/utils/handlers/any_character_in_input_value_handlers/from_to_hash_handler"
+require "regexer/utils/handlers/any_character_in_input_value_handlers/regex_shorthand_pattern_handler"
 
 module Regexer
   module Utils
@@ -13,12 +14,15 @@ module Regexer
     class AnyCharacterInValueTransformer
       def self.transform(value)
         basic_types_handler = ::Regexer::Utils::Handlers::AnyCharacterInInputValueHandlers::BasicTypesHandler.new
+        from_to_hash_handler = ::Regexer::Utils::Handlers::AnyCharacterInInputValueHandlers::FromToHashHandler.new
         char_range_pattern_handler =
           ::Regexer::Utils::Handlers::AnyCharacterInInputValueHandlers::CharacterRangePatternHandler.new
-        from_to_hash_handler = ::Regexer::Utils::Handlers::AnyCharacterInInputValueHandlers::FromToHashHandler.new
+        regex_shorthand_pattern_handler =
+          ::Regexer::Utils::Handlers::AnyCharacterInInputValueHandlers::RegexShorthandPatternHandler.new
 
         basic_types_handler.next_handler(char_range_pattern_handler)
                            .next_handler(from_to_hash_handler)
+                           .next_handler(regex_shorthand_pattern_handler)
 
         basic_types_handler.handle(value) || ""
       end
